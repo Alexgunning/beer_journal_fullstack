@@ -12,46 +12,45 @@ app.config['MONGO_URI'] = 'mongodb://localhost:27017/beer'
 
 mongo = PyMongo(app)
 
-def generateToken():
-   return token_hex(16)
+def generate_token():
+    return token_hex(16)
 
-def getUserId(token):
+def get_user_id(token):
     user = mongo.db.users.find_one({"token": token})
     if not user:
         abort(401)
     return str(user['_id'])
 
-def getUserToken(username, password):
+def get_user_token(username, password):
     user = mongo.db.users.find_one({"username": username, "password": password})
-    print(user)
     if not user:
         abort(401)
     return user['token']
 
-def getUserIdFromRequest(req):
+def get_user_id_from_request(req):
     token = req.headers.get('token')
-    userId = getUserId(token)
-    if not userId:
+    user_id = get_user_id(token)
+    if not user_id:
         abort(401)
-    return userId
+    return user_id
 
-def mapBeers(beers):
+def map_beers(beers):
     for beer in beers:
         beer['_id'] = str(beer['_id'])
         beer['user'] = str(beer['user'])
     return beers
-    
+
 
 @app.route('/newUser', methods=['POST'])
-def newUser():
+def new_user():
     username = request.args.get('username')
     password = request.args.get('password')
     name = request.args.get('name')
     if not username or not password or not name:
         return "name username and/or password not sent"
-    token = generateToken()
-    userInsert = mongo.db.users.insert_one({"username" : username, "password": password, "token": token, "name": name})
-    return jsonify({"_id": str(userInsert.inserted_id), "token": token})
+    token = generate_token()
+    user_insert = mongo.db.users.insert_one({"username" : username, "password": password, "token": token, "name": name})
+    return jsonify({"_id": str(user_insert.inserted_id), "token": token})
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -59,12 +58,12 @@ def login():
     password = request.args.get('password')
     if not username or not password:
         return "name username and/or password not sent"
-    token = getUserToken(username, password)
-    return jsonify({"token": token })
+    token = get_user_token(username, password)
+    return jsonify({"token": token})
 
 @app.route('/addBeer', methods=['POST'])
-def addBeer():
-    user = getUserIdFromRequest(request)
+def add_beer():
+    user = get_user_id_from_request(request)
     name = request.args.get('name')
     brewer = request.args.get('brewer')
     abv = request.args.get('abv')
@@ -72,13 +71,11 @@ def addBeer():
     return jsonify({"_id" : str(beer.inserted_id)})
 
 @app.route('/getBeers')
-def getBeers():
-    user = getUserIdFromRequest(request)
+def get_beers():
+    user = get_user_id_from_request(request)
     beer = mongo.db.beers.find({"user": ObjectId(user)})
-    mappedBeer = mapBeers(list(beer))
-    return jsonify(mappedBeer)
-    # return jsonify(list(beer))
-
+    mapped_beer = map_beers(list(beer))
+    return jsonify(mapped_beer)
 
 if __name__ == '__main__':
     app.run()
