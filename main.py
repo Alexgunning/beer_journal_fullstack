@@ -95,7 +95,7 @@ def get_beers():
 @app.route('/getBeerById/<string:beer_id>')
 def get_beer_by_id(beer_id):
     # user_id = get_user_id_from_request(request)
-    beer = mongo.db.beers.find({"_id": ObjectId(beer_id)})
+    beer = mongo.db.beers.find_one({"_id": ObjectId(beer_id)})
     mapped_beer = map_beer(beer)
     return jsonify(mapped_beer)
 
