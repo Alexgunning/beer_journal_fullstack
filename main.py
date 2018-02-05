@@ -79,7 +79,7 @@ def add_beer():
     mongo.db.beers.insert_one(beer_to_insert)
     return jsonify(beer_to_insert)
 
-@app.route('/putById', methods=['PUT'])
+@app.route('/putBeer', methods=['PUT'])
 def put_beer():
     user_id = get_user_id_from_request(request)
     try:
