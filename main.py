@@ -7,7 +7,6 @@ from flask import Flask, jsonify, request, abort
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
 
-
 app = Flask(__name__)
 CORS(app)
 bcrypt = Bcrypt(app)
@@ -28,8 +27,8 @@ def get_user_id(token):
         abort(401)
     return user['_id']
 
-def get_user_token(username, password):
-    user = mongo.db.users.find_one({"username": username, "password": password})
+def get_user_token(email, password):
+    user = mongo.db.users.find_one({"email": email, "password": password})
     if not user:
         abort(401)
     return user['token']
@@ -45,23 +44,23 @@ def get_user_id_from_request(req):
 
 @app.route('/newUser', methods=['POST'])
 def new_user():
-    username = request.args.get('username')
+    email = request.args.get('email')
     password = request.args.get('password')
     name = request.args.get('name')
-    if not username or not password or not name:
-        return "name username and/or password not sent"
+    if not email or not password or not name:
+        return "name email and/or password not sent"
     token = generate_token()
     _id = str(uuid4())
-    user_insert = mongo.db.users.insert_one({"_id": _id, "username" : username, "password": password, "token": token, "name": name})
+    user_insert = mongo.db.users.insert_one({"_id": _id, "email" : email, "password": password, "token": token, "name": name})
     return jsonify({"_id": user_insert.inserted_id})
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.args.get('username')
+    email = request.args.get('email')
     password = request.args.get('password')
-    if not username or not password:
-        return "name username and/or password not sent"
-    token = get_user_token(username, password)
+    if not email or not password:
+        return "name email and/or password not sent"
+    token = get_user_token(email, password)
     return jsonify({"token": token})
 
 @app.route('/addBeer', methods=['POST'])
