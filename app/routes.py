@@ -6,10 +6,11 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request, abort
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
+from app import app
 
-app = Flask(__name__)
+# app = Flask(__name__)
 CORS(app)
-bcrypt = Bcrypt(app)
+# bcrypt = Bcrypt(app)
 
 app.config['MONGO_DBNAME'] = 'beer'
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/beer'
@@ -108,5 +109,5 @@ def get_beer_by_id(beer_id):
     beer = mongo.db.beers.find_one({"_id": beer_id})
     return jsonify(beer)
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
