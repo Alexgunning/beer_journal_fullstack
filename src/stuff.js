@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import thunk from 'redux-thunk'
 import { render } from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
@@ -18,14 +18,11 @@ const store = createStore(
   applyMiddleware(...middleware)
 );
 
-class App extends Component {
 render(
   <Provider store={store}>
     <BrowserRouter>
       <Main/>
     </BrowserRouter>
-  </Provider>
+  </Provider>,
+  document.getElementById('root')
 )
-}
-
-export default App
