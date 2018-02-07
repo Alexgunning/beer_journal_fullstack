@@ -9,6 +9,9 @@ import { fetchBeerListIfNeeded } from '../actions/fetchBeerList'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'
 
+// import Button from 'antd/lib/button';
+// import '../App.css';
+
 const tableStyle = {
   float: 'left',
   width: '350px'
