@@ -6,7 +6,7 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request, abort
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
-from jsonschema import validate
+from jsonschema import validate, ValidationError
 from app import app, mongo
 from schema import beer_schema, user_schema, login_schema
 
@@ -14,9 +14,13 @@ from schema import beer_schema, user_schema, login_schema
 CORS(app)
 # bcrypt = Bcrypt(app)
 
+#TODO convert all aborts to this
+def bad_request(code, message):
+    response = jsonify({'message': message})
+    response.status_code = 400
+    return response
 
 ##TODO throw errors in getting user ids and tokens and catch them in auth routes to abort(401) instead of in repo functions
-
 def generate_token():
     return token_hex(16)
 
@@ -75,14 +79,14 @@ def add_beer():
     try:
         beer = json.loads(request.data)
     except:
-        abort(400)
+        return bad_request(400, "Request not json")
     beer["user"] = user_id
     beer["_id"] = str(uuid4())
 
     try:
         validate(beer, beer_schema)
-    except:
-        return abort(400)
+    except ValidationError as e:
+        return bad_request(400, e.message)
     mongo.db.beers.insert_one(beer)
     return jsonify(beer)
 
