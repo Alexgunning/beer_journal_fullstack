@@ -19,13 +19,15 @@ const store = createStore(
 );
 
 class App extends Component {
-render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <Main/>
-    </BrowserRouter>
-  </Provider>
-)
+  render() {
+    return (
+      <Provider store={store}>
+        <BrowserRouter>
+          <Main/>
+        </BrowserRouter>
+      </Provider>
+    )
+  }
 }
 
 export default App
