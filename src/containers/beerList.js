@@ -19,7 +19,7 @@ const listStyle = {
 const listItemStyle = {
   background: "#fbfbfb",
   border: "1px solid #d9d9d9",
-  "border-radius": "6px", 
+  "border-radius": "6px",
   "padding": "12px",
   "margin": "6px"
 };
@@ -39,7 +39,8 @@ class BeerList extends Component {
       name: PropTypes.string.isRequired,
       brewer: PropTypes.string.isRequired,
       abv: PropTypes.number.isRequired,
-      img: PropTypes.string.isRequired
+      imgage: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired
     }).isRequired).isRequired,
     dispatch: PropTypes.func.isRequired
   }
@@ -61,14 +62,14 @@ class BeerList extends Component {
               key={beer._id}
               style={listItemStyle}
               actions={[]}
-              extra={<img width={67} height={180} alt="logo" src={beer.img} />}
+              extra={<img width={67} height={180} alt="logo" src={beer.image} />}
             >
               <List.Item.Meta
                 title={<a href="http://daringfireball.net">{beer.name}</a>}
                 description={beer.brewer}
                 bordered={true}
               />
-              {beer.abv}% ABV
+              {beer.description}
             </List.Item>
           )}
         />
