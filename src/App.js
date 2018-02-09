@@ -6,6 +6,10 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import { createLogger } from 'redux-logger'
 import { Provider } from 'react-redux'
 
+//TODO DELETE
+import TestForm from './components/testForm'
+
+
 import Button from 'antd/lib/button';
 import './App.css';
 
@@ -30,7 +34,8 @@ class App extends Component {
         <BrowserRouter>
           <div>
             <Route exact path="/" component={Main}/>
-            <Route exact path="/beer/new" component={AddBeer}/>
+            <Route exact path="/new" component={TestForm}/>
+            <Route exact path="/beer/:id" component={AddBeer}/>
       </div>
         </BrowserRouter>
       </Provider>
