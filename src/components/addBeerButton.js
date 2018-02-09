@@ -13,12 +13,11 @@ const AddBeerButton = () => (
   <div  style={buttonStyle}>
  <Route render={({ history}) => (
    <Button type='primary'
-     onClick={() => { history.push('/beer/new') }}
+     onClick={() => { history.push('/new') }}
     >
       Add Beer
     </Button>
   )} />
- 
   </div>
 )
 
