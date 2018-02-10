@@ -6,12 +6,13 @@ const linkStyle = {
   textDecoration: 'none' /* no underline */
 }
 
-const Beer = ({ name, brewer, abv, _id, requestBeer, dispatch }) => (
+const Beer = ({ name, brewer, abv, _id, description, requestBeer, dispatch }) => (
   <a href="#" style={linkStyle} onClick={(e) => dispatch(requestBeer(_id))}>
     <tr>
       <td>{name}</td>
       <td>{brewer}</td>
       <td>{abv} %</td>
+      <td>{description} %</td>
     </tr>
   </a>
 )
@@ -20,7 +21,8 @@ Beer.propTypes = {
   _id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   brewer: PropTypes.string.isRequired,
-  abv: PropTypes.number.isRequired
+  abv: PropTypes.number.isRequired,
+  description: PropTypes.number.isRequired
 }
 
 export default Beer

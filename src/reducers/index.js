@@ -40,13 +40,12 @@ function selectedBeer(state = { _id: null, name: "", brewer: "", abv: "" }, acti
   switch (action.type) {
     case REQUEST_SELECTED_BEER:
       return {
-         _id: null, name: "", brewer: "", abv: ""
+         _id: null, name: "", brewer: "", abv: "", description: ""
       }
     case NEW_BEER:
-      console.log("NEW_BEER_REDUCER");
       //TODO figure out if we want to have the action set the id or the API
       return {
-         _id: null, name: "", brewer: "", abv: ""
+         _id: null, name: "", brewer: "", abv: "", description: ""
     }
     case RECEIVE_SELECTED_BEER:
       return action.beer

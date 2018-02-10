@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { postBeer } from '../actions/postBeer'
-import BeerForm from '../components/beerForm'
+import BeerForm from '../components/testForm'
 
 // <BeerForm handleSubmit={this.props.dispatch(this.props.postBeer)}/>
 
