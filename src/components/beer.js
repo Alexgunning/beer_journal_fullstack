@@ -1,20 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const linkStyle = {
-  color: 'black',
-  textDecoration: 'none' /* no underline */
-}
-
 const Beer = ({ name, brewer, abv, _id, description, requestBeer, dispatch }) => (
-  <a href="#" style={linkStyle} onClick={(e) => dispatch(requestBeer(_id))}>
-    <tr>
-      <td>{name}</td>
-      <td>{brewer}</td>
-      <td>{abv} %</td>
-      <td>{description} %</td>
-    </tr>
-  </a>
+  <div>
+    <p>{name}</p>
+    <p>{brewer}</p>
+    <p>{abv}</p>
+    <p>{description}</p>
+  </div>
 )
 
 Beer.propTypes = {
