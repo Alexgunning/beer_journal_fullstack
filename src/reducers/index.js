@@ -36,7 +36,7 @@ function allBeers(state = { isFetching: false, beers: [] }, action) {
   }
 }
 
-function selectedBeer(state = { _id: null, name: "", brewer: "", abv: "" }, action) {
+function selectedBeer(state = { _id: null, name: "alex", brewer: "", abv: "" }, action) {
   switch (action.type) {
     case REQUEST_SELECTED_BEER:
       return {
