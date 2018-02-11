@@ -24,9 +24,15 @@ const Header = () => (
       </div>
       <div style={formStyle}>
         <InitializeForm beerId={"c8ee2a1a-3c7b-4bdb-9999-42f003d65853"} />
-  </div>
+      </div>
     </div>
   </div>
 )
+      // <div style={formStyle}>
+      //   <BeerForm beerId={"c8ee2a1a-3c7b-4bdb-9999-42f003d65853"} />
+      // </div>
+      // <div style={formStyle}>
+      //   <TestForm beerId={"c8ee2a1a-3c7b-4bdb-9999-42f003d65853"} />
+      // </div>
 
 export default Header

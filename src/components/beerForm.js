@@ -4,50 +4,52 @@ import { Field, reduxForm } from 'redux-form';
 
 // <form onSubmit={console.log("SUMBIT")}>
 // const { handleSubmit, pristine, reset, submitting } = props;
+class BeerForm extends Component {
 
-let BeerForm = props => {
-  const { initialValues, handleSubmit, pristine, reset, submitting } = props;
-  console.log("BEER FORM INITIAL VALUES:", initialValues)
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Beer</label>
+  render() {
+    const { initialValues, handleSubmit, pristine, reset, submitting } = this.props;
+
+    return (
+      <form onSubmit={handleSubmit}>
         <div>
-          <Field
-            name="name"
-            component="input"
-            type="text"
-          />
+          <label>Beer</label>
+          <div>
+            <Field
+              name="name"
+              component="input"
+              type="text"
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <label>Brewer</label>
         <div>
-          <Field
-            name="brewer"
-            component="input"
-            type="text"
-          />
+          <label>Brewer</label>
+          <div>
+            <Field
+              name="brewer"
+              component="input"
+              type="text"
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <label>abv</label>
         <div>
-          <Field
-            name="abv"
-            component="input"
-            type="text"
-          />
+          <label>abv</label>
+          <div>
+            <Field
+              name="abv"
+              component="input"
+              type="text"
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <button type="submit" disabled={pristine || submitting}>Submit</button>
-        <button type="button" disabled={pristine || submitting} onClick={reset}>
-          Clear Values
-        </button>
-      </div>
-    </form>
-  );
+        <div>
+          <button type="submit" disabled={pristine || submitting}>Submit</button>
+          <button type="button" disabled={pristine || submitting} onClick={reset}>
+            Clear Values
+          </button>
+        </div>
+      </form>
+    );
+  };
 }
 
 const mapStateToProps = (state) =>  ({

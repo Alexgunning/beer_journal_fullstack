@@ -144,11 +144,14 @@ const mapStateToProps = (state) =>  ({
 })
 
 SimpleForm = connect(
-  mapStateToProps,
+     state => ({
+         initialValues: state.selectedBeer
+       }),
   mapDispatchToProps
 )(SimpleForm);
 
 export default reduxForm({
   form: "simple", // a unique identifier for this form
   validate,
+  enableReinitialize : true
 })(SimpleForm);
