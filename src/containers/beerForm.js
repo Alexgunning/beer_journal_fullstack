@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
+import { postBeer } from '../actions/postBeer'
+import { putBeer } from '../actions/putBeer'
 import AntForm from '../components/antForm.js'
 
 const listStyle = {
@@ -22,7 +24,7 @@ class BeerForm extends Component {
     }
   }
   render() {
-    const { selectedBeer, handleSubmit, load, pristine, reset, submitting } = this.props
+    const { selectedBeer, handlePostSubmit, handlePutSubmit, load, pristine, reset, submitting } = this.props
     if (selectedBeer.loading){
       return (
         <div>
@@ -32,7 +34,7 @@ class BeerForm extends Component {
     }
     else {
       return(
-        <AntForm initialValues={selectedBeer.beer}/>
+        <AntForm initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)}/>
       )
     }
   }
@@ -46,7 +48,10 @@ BeerForm = connect(
   }),
   dispatch => ({
     fetchBeer: (beerId) =>  dispatch(fetchBeerIfNeeded(beerId)),
-    newBeer: () => dispatch(newBeer)
+    newBeer: () => dispatch(newBeer),
+    handlePostSubmit: (beer) => dispatch(postBeer(beer)),
+    handlePutSubmit: (beer) => dispatch(putBeer(beer)),
+
   }) // bind account loading action creator
 )(BeerForm)
 
