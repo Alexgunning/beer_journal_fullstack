@@ -53,8 +53,8 @@ let data1 = {
 
 let data2 = {
     _id: 'bfdalj',
-    beer: 'Divided SKy',
-    brewer: '4 Hands',
+    beer: 'divided sky',
+    brewer: '4 hands',
     abv: '9.6',
     description : "sit amet commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morb",
   }

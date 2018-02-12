@@ -67,7 +67,7 @@ class SimpleForm extends Component {
   }
   render() {
     const { initialValues, handleSubmit, pristine, reset, submitting, beer } = this.props;
-    console.log("INITIAL VALUES:", initialValues);
+    console.log("INITIAL VALUES TEST FORM:", initialValues);
     return (
       <div style={formStyle}>
         <Form onSubmit={handleSubmit} initialValues={initialValues}>
@@ -143,10 +143,18 @@ const mapStateToProps = (state) =>  ({
 
 })
 
+let data = {
+    _id: 'bfdalj',
+    name: 'divided sky',
+    brewer: '4 hands',
+    abv: '9.6',
+    description : "sit amet commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morb",
+  }
+
 SimpleForm = connect(
-     state => ({
-         initialValues: state.selectedBeer
-       }),
+  state => ({
+    initialValues: data
+  }),
   mapDispatchToProps
 )(SimpleForm);
 

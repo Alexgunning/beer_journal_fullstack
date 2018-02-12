@@ -1,63 +1,63 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
-const data = {
-  // used to populate "account" reducer when "Load" is clicked
-  _id: "alex",
-  beer: 'Sculpin',
-  brewer: 'Ballast Point',
-  abv: '6.8',
-  description : "sit amet commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morb",
-}
 
-let InitializeFromStateForm = props => {
-  const { initialValues, handleSubmit, load, pristine, reset, submitting } = props
-  return (
-    <form onSubmit={handleSubmit}>
-      <div>
-      </div>
-      <div>
-        <label>Beer</label>
+class InitializeFromStateForm extends Component {
+
+  componentDidMount() {
+    let { fetchBeer } = this.props
+    let beerId = this.props.match.params.id;
+    fetchBeer(beerId)
+  }
+  render() {
+    const { initialValues, handleSubmit, load, pristine, reset, submitting } = this.props
+    return (
+      <form onSubmit={handleSubmit}>
         <div>
-          <Field
-            name="beer"
-            component="input"
-            type="text"
-          />
         </div>
-      </div>
-      <div>
-        <label>Brewer</label>
         <div>
-          <Field
-            name="brewer"
-            component="input"
-            type="text"
-          />
+          <label>Beer</label>
+          <div>
+            <Field
+              name="name"
+              component="input"
+              type="text"
+            />
+          </div>
         </div>
-      </div>
-      <div>
-        <label>ABV</label>
         <div>
-          <Field
-            name="abv"
-            component="input"
-            type="text"
-          />
+          <label>Brewer</label>
+          <div>
+            <Field
+              name="brewer"
+              component="input"
+              type="text"
+            />
+          </div>
         </div>
-        <Field label="Description" name="description" component="input" />
-      </div>
-      <div>
-        <button type="submit" disabled={pristine || submitting}>
-          Submit
-        </button>
-        <button type="button" disabled={pristine || submitting} onClick={reset}>
-          Undo Changes
-        </button>
-      </div>
-    </form>
-  )
+        <div>
+          <label>ABV</label>
+          <div>
+            <Field
+              name="abv"
+              component="input"
+              type="text"
+            />
+          </div>
+          <Field label="Description" name="description" component="input" />
+        </div>
+        <div>
+          <button type="submit" disabled={pristine || submitting}>
+            Submit
+          </button>
+          <button type="button" disabled={pristine || submitting} onClick={reset}>
+            Undo Changes
+          </button>
+        </div>
+      </form>
+    )
+  }
 }
 
 // Decorate with reduxForm(). It will read the initialValues prop provided by connect()
@@ -81,7 +81,7 @@ InitializeFromStateForm = connect(
     initialValues: state.selectedBeer
   }),
   dispatch => ({
-    fetchBeer: () => {dispatch(fetchBeerIfNeeded)}
+    fetchBeer: (beerId) =>  dispatch(fetchBeerIfNeeded(beerId))
   }) // bind account loading action creator
 )(InitializeFromStateForm)
 

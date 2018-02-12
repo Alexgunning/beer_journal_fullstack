@@ -11,7 +11,7 @@ const buttonStyle = {
 // const Beer = ({  createNewBeer, dispatch }) => (
 const AddBeerButton = () => (
   <div  style={buttonStyle}>
- <Route render={({ history}) => (
+ <Route render={({history}) => (
    <Button type='primary'
      onClick={() => { history.push('/new') }}
     >

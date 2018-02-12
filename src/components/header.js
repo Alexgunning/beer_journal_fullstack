@@ -23,11 +23,11 @@ const Header = () => (
         Beer Journal
       </div>
       <div style={formStyle}>
-        <InitializeForm beerId={"c8ee2a1a-3c7b-4bdb-9999-42f003d65853"} />
       </div>
     </div>
   </div>
 )
+        // <TestForm beerId={"80695522-93aa-4729-97f7-b115a80f0998"} />
       // <div style={formStyle}>
       //   <BeerForm beerId={"c8ee2a1a-3c7b-4bdb-9999-42f003d65853"} />
       // </div>

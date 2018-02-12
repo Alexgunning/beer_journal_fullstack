@@ -9,6 +9,7 @@ import Beer from '../components/beer'
 import { fetchBeerListIfNeeded } from '../actions/fetchBeerList'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'
+import { Route } from 'react-router-dom'
 
 const listStyle = {
   width: "50%",
@@ -53,6 +54,7 @@ class BeerList extends Component {
   render() {
     return (
       <div style={listStyle}>
+       <Route render={({history}) => (
         <List
           itemLayout="vertical"
           size="large"
@@ -62,10 +64,11 @@ class BeerList extends Component {
               key={beer._id}
               style={listItemStyle}
               actions={[]}
+              onClick={()=> {history.push(`beer/${beer._id}`)}}
               extra={<img width={67} height={180} alt="logo" src={beer.image} />}
             >
               <List.Item.Meta
-                title={<a href="http://daringfireball.net">{beer.name}</a>}
+                title={beer.name}
                 description={beer.brewer}
                 bordered={true}
               />
@@ -73,6 +76,7 @@ class BeerList extends Component {
             </List.Item>
           )}
         />
+       )} />
       </div>
     );
 
