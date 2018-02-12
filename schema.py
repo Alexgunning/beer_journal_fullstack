@@ -5,7 +5,9 @@ beer_schema = {
         "name" : {"type" : "string"},
         "brewer" : {"type" : "string"},
         "abv" : {"type" : "number"},
-        "user" : {"type" : "string"}
+        "user" : {"type" : "string"},
+        "image" : {"type" : ["string", "null"]},
+        "rating" : {"type" : ["number"]},
     },
     "required": ["_id", "name", "brewer", "abv", "user"]
 }
