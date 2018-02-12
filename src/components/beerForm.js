@@ -1,16 +1,31 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form'
+import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 
-// <form onSubmit={console.log("SUMBIT")}>
-// const { handleSubmit, pristine, reset, submitting } = props;
-class BeerForm extends Component {
+const listStyle = {
+  width: "20%",
+  margin: "0 auto"
+};
 
+class InitializeFromStateForm extends Component {
+
+  componentDidMount() {
+    let { fetchBeer } = this.props
+    console.log(this.props.match);
+    if (this.props.match.path == "/new")
+      newBeer()
+    else {
+      let beerId = this.props.match.params.id;
+      fetchBeer(beerId)
+    }
+  }
   render() {
-    const { initialValues, handleSubmit, pristine, reset, submitting } = this.props;
-
+    const { initialValues, handleSubmit, load, pristine, reset, submitting } = this.props
     return (
-      <form onSubmit={handleSubmit}>
+      <form style={listStyle} onSubmit={handleSubmit}>
+        <div>
+        </div>
         <div>
           <label>Beer</label>
           <div>
@@ -32,7 +47,7 @@ class BeerForm extends Component {
           </div>
         </div>
         <div>
-          <label>abv</label>
+          <label>ABV</label>
           <div>
             <Field
               name="abv"
@@ -40,39 +55,45 @@ class BeerForm extends Component {
               type="text"
             />
           </div>
+          <Field label="Description" name="description" component="input" />
         </div>
         <div>
-          <button type="submit" disabled={pristine || submitting}>Submit</button>
+          <button type="submit" disabled={pristine || submitting}>
+            Submit
+          </button>
           <button type="button" disabled={pristine || submitting} onClick={reset}>
-            Clear Values
+            Undo Changes
           </button>
         </div>
       </form>
-    );
-  };
+    )
+  }
 }
 
-const mapStateToProps = (state) =>  ({
-  initialValues : {
-    abv : 10.4,
-    brewer : "Boulevard",
-    description : "sit amet commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas maecenas pharetra convallis posuere morbi leo urna molestie at elementum eu facilisis sed odio",
-    image : "https://res.cloudinary.com/ratebeer/image/upload/w_250,c_limit/beer_412233.jpg",
-    name : "Love Child",
-    user : "0afe8b6a-4478-4256-9084-a4467edb4d50",
-    _id : "c8ee2a1a-3c7b-4bdb-9999-42f003d65853"
-  }
-
-})
-
-BeerForm = connect(
-  mapStateToProps,
-  { load: () => {} } // bind account loading action creator
-)(BeerForm);
-
-BeerForm = reduxForm({
-  form: 'addBeer', // a unique identifier for this form
+// Decorate with reduxForm(). It will read the initialValues prop provided by connect()
+InitializeFromStateForm = reduxForm({
+  form: 'initializeFromState', // a unique identifier for this formo
   enableReinitialize : true
-})(BeerForm);
+})(InitializeFromStateForm)
 
-export default BeerForm
+// // You have to connect() to any reducers that you wish to connect to yourself
+// InitializeFromStateForm = connect(
+//   state => ({
+//     initialValues: state.account.data // pull initial values from account reducer
+//   }),
+//   { load: loadAccount } // bind account loading action creator
+// )(InitializeFromStateForm)
+
+
+// You have to connect() to any reducers that you wish to connect to yourself
+InitializeFromStateForm = connect(
+  state => ({
+    initialValues: state.selectedBeer
+  }),
+  dispatch => ({
+    fetchBeer: (beerId) =>  dispatch(fetchBeerIfNeeded(beerId)),
+    newBeer: () => dispatch(newBeer)
+  }) // bind account loading action creator
+)(InitializeFromStateForm)
+
+export default InitializeFromStateForm

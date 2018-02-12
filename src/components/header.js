@@ -1,7 +1,6 @@
 import React from 'react'
 import TestForm from './testForm'
 import BeerForm from './beerForm'
-import InitializeForm from './initializeForm'
 
 const headerStyle = {
   width: '30%',

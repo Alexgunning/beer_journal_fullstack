@@ -16,7 +16,7 @@ import './App.css';
 import reducer from './reducers'
 import Main from './components/main'
 import AddBeer from './containers/addBeer'
-import InitializeForm from './components/initializeForm'
+import BeerForm from './components/beerForm.js'
 
 const middleware = [ thunk ];
 if (process.env.NODE_ENV !== 'production') {
@@ -35,8 +35,8 @@ class App extends Component {
           <BrowserRouter>
             <div>
               <Route exact path="/" component={Main}/>
-              <Route exact path="/new" component={InitializeForm}/>
-              <Route exact path="/beer/:id" component={InitializeForm}/>
+              <Route exact path="/new" component={BeerForm}/>
+              <Route exact path="/beer/:id" component={BeerForm}/>
             </div>
           </BrowserRouter>
       </Provider>
