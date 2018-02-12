@@ -32,13 +32,13 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <BrowserRouter>
-          <div>
-            <Route exact path="/" component={Main}/>
-            <Route exact path="/new" component={TestForm}/>
-            <Route exact path="/beer/:id" component={InitializeForm}/>
-      </div>
-        </BrowserRouter>
+          <BrowserRouter>
+            <div>
+              <Route exact path="/" component={Main}/>
+              <Route exact path="/new" component={InitializeForm}/>
+              <Route exact path="/beer/:id" component={InitializeForm}/>
+            </div>
+          </BrowserRouter>
       </Provider>
     )
   }
