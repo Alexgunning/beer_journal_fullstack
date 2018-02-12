@@ -8,7 +8,7 @@ const listStyle = {
   margin: "0 auto"
 };
 
-class InitializeFromStateForm extends Component {
+class BeerForm extends Component {
 
   componentDidMount() {
     let { fetchBeer } = this.props
@@ -71,29 +71,29 @@ class InitializeFromStateForm extends Component {
 }
 
 // Decorate with reduxForm(). It will read the initialValues prop provided by connect()
-InitializeFromStateForm = reduxForm({
+BeerForm = reduxForm({
   form: 'initializeFromState', // a unique identifier for this formo
   enableReinitialize : true
-})(InitializeFromStateForm)
+})(BeerForm)
 
 // // You have to connect() to any reducers that you wish to connect to yourself
-// InitializeFromStateForm = connect(
+// BeerForm = connect(
 //   state => ({
 //     initialValues: state.account.data // pull initial values from account reducer
 //   }),
 //   { load: loadAccount } // bind account loading action creator
-// )(InitializeFromStateForm)
+// )(BeerForm)
 
 
 // You have to connect() to any reducers that you wish to connect to yourself
-InitializeFromStateForm = connect(
+BeerForm = connect(
   state => ({
-    initialValues: state.selectedBeer
+    initialValues: state.selectedBeer.beer
   }),
   dispatch => ({
     fetchBeer: (beerId) =>  dispatch(fetchBeerIfNeeded(beerId)),
     newBeer: () => dispatch(newBeer)
   }) // bind account loading action creator
-)(InitializeFromStateForm)
+)(BeerForm)
 
-export default InitializeFromStateForm
+export default BeerForm
