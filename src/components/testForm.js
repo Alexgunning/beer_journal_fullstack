@@ -58,14 +58,13 @@ const makeField = Component => (values) => {
     <FormItem
       {...formItemLayout}
       label={label}
-      name={input.name}
-      value={value}
+      initialValues={data}
+      initialValue={data}
       validateStatus={hasError ? 'error' : 'success'}
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
-      initialValues={data}
     >
-      <Component {...input} value={value} {...rest} name={input.name} initialValues={data} children={children} />
+      <Component {...input} {...rest} initialValue={data} initialValues={data} children={children} />
     </FormItem>
   );
 };
