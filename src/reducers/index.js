@@ -37,15 +37,15 @@ function allBeers(state = { isFetching: false, beers: [] }, action) {
 }
 
 
-function selectedBeer(state = {loadingBeer : false, beer : {}}, action) {
+function selectedBeer(state = {loading : false, beer : {}}, action) {
   switch (action.type) {
     case REQUEST_SELECTED_BEER:
-      return {loadingBeer : true, beer : {}};
+      return {loading : true, beer : {}};
     case NEW_BEER:
-      return {loadingBeer : false, beer : {}};
+      return {loading : false, beer : {}};
     case RECEIVE_SELECTED_BEER:
       return {
-        loadingBeer : false,
+        loading : false,
         beer : action.beer
       }
     default:
