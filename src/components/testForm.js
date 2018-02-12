@@ -50,6 +50,7 @@ const makeField = Component => (values) => {
   console.log("MAKE FIELD VALUES:" , values);
   const { initialValues, input, meta, children, hasFeedback, name, label, ...rest } = values
   const hasError = meta.touched && meta.invalid;
+  let value = data[input.name];
   console.log("MAKE FIELD", initialValues)
   console.log("MAKE FIELD data", data)
   console.log("MAKE FIELD input name", input.name)
@@ -58,11 +59,13 @@ const makeField = Component => (values) => {
       {...formItemLayout}
       label={label}
       name={input.name}
+      value={value}
       validateStatus={hasError ? 'error' : 'success'}
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
+      initialValues={data}
     >
-      <Component {...input} {...rest} name={input.name} initialValues={initialValues} children={children} />
+      <Component {...input} value={value} {...rest} name={input.name} initialValues={data} children={children} />
     </FormItem>
   );
 };
