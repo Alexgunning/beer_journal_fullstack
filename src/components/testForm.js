@@ -43,7 +43,7 @@ const tailFormItemLayout = {
 
 const formStyle = {
   margin: "0 auto",
-  "margin-top": "80px"
+  marginTop: "80px"
 };
 
 const makeField = Component => (values) => {
