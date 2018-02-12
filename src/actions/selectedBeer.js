@@ -33,7 +33,7 @@ export const receiveBeer = (beer, json) => ({
 const fetchBeer = beerId => dispatch => {
   dispatch(requestBeer(beerId))
   return axios.get(`http://127.0.0.1:5000/getBeerById/${beerId}`)
-    .then(res => dispatch(receiveBeer(beer,res.data)))
+    .then(res => dispatch(receiveBeer(beer,res.data)), err => console.log("ERR", err))
 }
 
 const shouldFetchBeer = (state, beer) => {
