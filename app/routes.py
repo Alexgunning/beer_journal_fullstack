@@ -2,13 +2,16 @@
 import json
 from secrets import token_hex
 from uuid import uuid4
+from flask import Flask, jsonify, request, abort, send_from_directory
 from flask_cors import CORS
-from flask import Flask, jsonify, request, abort
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
 from jsonschema import validate, ValidationError
 from app import app, mongo
 from schema import beer_schema, user_schema, login_schema
+
+# set the project root directory as the static folder, you can set others.
+
 
 # app = Flask(__name__)
 CORS(app)
@@ -86,6 +89,7 @@ def add_beer():
     try:
         validate(beer, beer_schema)
     except ValidationError as e:
+        print(e.message)
         return bad_request(400, e.message)
     mongo.db.beers.insert_one(beer)
     return jsonify(beer)
@@ -101,7 +105,7 @@ def put_beer():
     try:
         mongo.db.beers.insert_one(beer)
     except:
-        mongo.db.beers.update_one({"_id:": user_id}, {"$set": beer})
+        mongo.db.beers.update_one({"_id:": beer["_id"]}, {"$set": beer})
     return jsonify(beer)
 
 @app.route('/getBeers')
@@ -113,7 +117,6 @@ def get_beers():
 @app.route('/getBeerById/<string:beer_id>')
 def get_beer_by_id(beer_id):
     beer = mongo.db.beers.find_one({"_id": beer_id})
+    if not beer:
+        abort(400)
     return jsonify(beer)
-
-# if __name__ == '__main__':
-#     app.run()
