@@ -3,17 +3,27 @@ import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 
+const listStyle = {
+  width: "20%",
+  margin: "0 auto"
+};
+
 class InitializeFromStateForm extends Component {
 
   componentDidMount() {
     let { fetchBeer } = this.props
-    let beerId = this.props.match.params.id;
-    fetchBeer(beerId)
+    console.log(this.props.match);
+    if (this.props.match.path == "/new")
+      newBeer()
+    else {
+      let beerId = this.props.match.params.id;
+      fetchBeer(beerId)
+    }
   }
   render() {
     const { initialValues, handleSubmit, load, pristine, reset, submitting } = this.props
     return (
-      <form onSubmit={handleSubmit}>
+      <form style={listStyle} onSubmit={handleSubmit}>
         <div>
         </div>
         <div>
@@ -81,7 +91,8 @@ InitializeFromStateForm = connect(
     initialValues: state.selectedBeer
   }),
   dispatch => ({
-    fetchBeer: (beerId) =>  dispatch(fetchBeerIfNeeded(beerId))
+    fetchBeer: (beerId) =>  dispatch(fetchBeerIfNeeded(beerId)),
+    newBeer: () => dispatch(newBeer)
   }) // bind account loading action creator
 )(InitializeFromStateForm)
 
