@@ -9,6 +9,14 @@ const RadioGroup = Radio.Group;
 const { Option } = Select;
 const { TextArea } = Input;
 
+let data = {
+    _id: 'bfdalj',
+    name: 'divided sky',
+    brewer: '4 hands',
+    abv: '9.6',
+    description : "sit amet commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morb",
+  }
+
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -38,8 +46,12 @@ const formStyle = {
   "margin-top": "80px"
 };
 
-const makeField = Component => ({ input, meta, children, hasFeedback, label, ...rest }) => {
+const makeField = Component => (values) => {
+  console.log("MAKE FIELD VALUES:" , values);
+  const { initialValues, input, meta, children, hasFeedback, label, ...rest } = values
   const hasError = meta.touched && meta.invalid;
+  console.log("MAKE FIELD", initialValues)
+  console.log("MAKE FIELD data", data)
   return (
     <FormItem
       {...formItemLayout}
@@ -48,7 +60,7 @@ const makeField = Component => ({ input, meta, children, hasFeedback, label, ...
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
     >
-      <Component {...input} {...rest} children={children} />
+      <Component {...input} {...rest} initialValues={initialValues} children={children} />
     </FormItem>
   );
 };
@@ -63,14 +75,14 @@ class SimpleForm extends Component {
 
   componentDidMount() {
     const { fetchBeer, beerId } = this.props
-    fetchBeer(beerId)
+    fetchBeer("d18e9bad-2d5f-40da-ac73-f9ee8f9d96e8")
   }
   render() {
     const { initialValues, handleSubmit, pristine, reset, submitting, beer } = this.props;
     console.log("INITIAL VALUES TEST FORM:", initialValues);
     return (
       <div style={formStyle}>
-        <Form onSubmit={handleSubmit} initialValues={initialValues}>
+        <Form onSubmit={handleSubmit}>
           <Field
             label="Name"
             name="name"
@@ -143,13 +155,6 @@ const mapStateToProps = (state) =>  ({
 
 })
 
-let data = {
-    _id: 'bfdalj',
-    name: 'divided sky',
-    brewer: '4 hands',
-    abv: '9.6',
-    description : "sit amet commodo nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar pellentesque habitant morb",
-  }
 
 SimpleForm = connect(
   state => ({
