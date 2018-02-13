@@ -103,9 +103,15 @@ def put_beer():
         abort(400)
     beer["user"] = user_id
     try:
+        validate(beer, beer_schema)
+    except ValidationError as e:
+        print(e.message)
+        return bad_request(400, e.message)
+    try:
         mongo.db.beers.insert_one(beer)
     except:
-        mongo.db.beers.update_one({"_id:": beer["_id"]}, {"$set": beer})
+        print("update one")
+        mongo.db.beers.update_one({"_id": beer["_id"]}, {"$set": beer})
     return jsonify(beer)
 
 @app.route('/getBeers')
