@@ -3,13 +3,20 @@ import { Form, Input, Button, Rate } from 'antd';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
-const formStyle = {
-  paddingTop: "80px",
-  width: "30%",
-  margin: "0 auto",
+const formPadStyle = {
+  padding: "25px"
   // backgroundColor: "#D3D3D3"
 };
 
+const formStyle = {
+  background: "#fbfbfb",
+  border: "1px solid #d9d9d9",
+  "border-radius": "6px",
+  width: "50%",
+  margin: "0 auto",
+  padding: "25px"
+  // backgroundColor: "#D3D3D3"
+};
 class RegistrationForm extends Component {
   state = {
     confirmDirty: false,
@@ -36,103 +43,86 @@ class RegistrationForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    const buttonName = this.props.buttonName;
     const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 6 }
-      },
+      span: 10,
+      offset: 3,
+    }
+
+    const tailFormItemLayout = {
       wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 14 }
-      }
-    };
-
-    // labelCol: {
-    //   xs: { span: 24 },
-    //   sm: { span: 8 },
-    // },
-    // wrapperCol: {
-    //   xs: { span: 24 },
-    //   sm: { span: 16 },
-    // },
-  const tailFormItemLayout = {
-    wrapperCol: {
-      xs: {
-        span: 24,
-        offset: 0,
+        span: 12,
+        offset: 6,
       },
-      sm: {
-        span: 16,
-        offset: 8,
-      },
-    },
-  };
+    }
 
-  let initialValues = this.props.initialValues;
-  console.log("ANT FORM SUBMIT", this.props.handleSubmit);
+    let initialValues = this.props.initialValues;
+    console.log("ANT FORM SUBMIT", this.props.handleSubmit);
 
-  return (
-    <div style={formStyle}>
-      <img width={67} height={180} alt="logo" src={initialValues.image} />
-      <Form onSubmit={this.handleSubmit}>
-        <FormItem
-          {...formItemLayout}
-          label="Beer"
-        >
-          {getFieldDecorator('name', {
-            initialValue: initialValues.name
-          })(
-            <Input />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Brewer"
-        >
-          {getFieldDecorator('brewer', {
-            initialValue: initialValues.brewer
-          })(
-            <Input />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="ABV"
-        >
-          {getFieldDecorator('abv', {
-            initialValue: initialValues.abv
-          })(
-            <Input />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Description"
-        >
-          {getFieldDecorator('description', {
-            initialValue: initialValues.description
-          })(
-            <TextArea />
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Rating"
-        >
-          {getFieldDecorator('rating', {
-            initialValue: initialValues.rating
-          })(
-            <Rate allowHalf  />
-          )}
-        </FormItem>
-        <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" >AddBeer</Button>
-        </FormItem>
-      </Form>
-    </div>
-  );
+    return (
+      <div style={formPadStyle}>
+        <div style={formStyle}>
+          <img width={67} height={180} alt="logo" src={initialValues.image} />
+          <Form onSubmit={this.handleSubmit}>
+            <FormItem
+              {...formItemLayout}
+              label="Beer"
+            >
+              {getFieldDecorator('name', {
+                initialValue: initialValues.name
+              })(
+                <Input />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="Brewer"
+            >
+              {getFieldDecorator('brewer', {
+                initialValue: initialValues.brewer
+              })(
+                <Input />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="ABV"
+            >
+              {getFieldDecorator('abv', {
+                initialValue: initialValues.abv
+              })(
+                <Input />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="Description"
+            >
+              {getFieldDecorator('description', {
+                initialValue: initialValues.description
+              })(
+                <TextArea />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="Rating"
+            >
+              {getFieldDecorator('rating', {
+                initialValue: initialValues.rating
+              })(
+                <Rate allowHalf  />
+              )}
+            </FormItem>
+            <FormItem {...tailFormItemLayout}>
+              <Button type="primary" htmlType="submit" >{buttonName}</Button>
+            </FormItem>
+          </Form>
+        </div>
+      </div>
+    );
   }
 }
 

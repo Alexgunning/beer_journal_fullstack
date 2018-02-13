@@ -36,7 +36,7 @@ class BeerForm extends Component {
     }
     else {
       return(
-        <Form initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)}/>
+        <Form initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)} buttonName={this.props.match.path == "/new" ? "Add Beer": "Update Beer"} />
       )
     }
   }
