@@ -14,10 +14,12 @@ const listStyle = {
 class BeerForm extends Component {
 
   componentDidMount() {
-    let { fetchBeer } = this.props
+    let { fetchBeer, newBeer} = this.props;
     console.log(this.props.match);
-    if (this.props.match.path == "/new")
-      newBeer()
+    if (this.props.match.path == "/new") {
+      console.log("NEW COMPONENT DID MOUNT");
+      newBeer();
+    }
     else {
       let beerId = this.props.match.params.id;
       fetchBeer(beerId)
@@ -48,7 +50,7 @@ BeerForm = connect(
   }),
   dispatch => ({
     fetchBeer: (beerId) =>  dispatch(fetchBeerIfNeeded(beerId)),
-    newBeer: () => dispatch(newBeer),
+    newBeer: () => dispatch(newBeer()),
     handlePostSubmit: (beer) => dispatch(postBeer(beer)),
     handlePutSubmit: (beer) => dispatch(putBeer(beer)),
 

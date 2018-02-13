@@ -37,6 +37,7 @@ function allBeers(state = { isFetching: false, beers: [] }, action) {
 
 
 function selectedBeer(state = {loading : false, beer : {}}, action) {
+  console.log("SECLETED BEER ACTION", action);
   switch (action.type) {
     case REQUEST_SELECTED_BEER:
       return {loading : true, beer : {}};
