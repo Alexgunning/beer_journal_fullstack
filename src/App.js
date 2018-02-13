@@ -6,17 +6,11 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import { createLogger } from 'redux-logger'
 import { Provider } from 'react-redux'
 
-//TODO DELETE
-import TestForm from './components/testForm'
-
-
 import Button from 'antd/lib/button';
 import './App.css';
 
 import reducer from './reducers'
 import Main from './components/main'
-import AddBeer from './containers/addBeer'
-import BeerForm from './components/beerForm.js'
 import BeerFormContainer from './containers/beerForm'
 
 const middleware = [ thunk ];

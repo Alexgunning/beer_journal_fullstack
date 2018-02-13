@@ -1,99 +1,139 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
-import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
+import { Form, Input, Button, Rate } from 'antd';
+const FormItem = Form.Item;
+const { TextArea } = Input;
 
-const listStyle = {
-  width: "20%",
-  margin: "0 auto"
+const formStyle = {
+  paddingTop: "80px",
+  width: "30%",
+  margin: "0 auto",
+  // backgroundColor: "#D3D3D3"
 };
 
-class BeerForm extends Component {
-
-  componentDidMount() {
-    let { fetchBeer } = this.props
-    console.log(this.props.match);
-    if (this.props.match.path == "/new")
-      newBeer()
-    else {
-      let beerId = this.props.match.params.id;
-      fetchBeer(beerId)
-    }
+class RegistrationForm extends Component {
+  state = {
+    confirmDirty: false,
+    autoCompleteResult: [],
+  };
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        //TODO FIGURE OUT A BETTE WAY TO DO THIS
+        if (this.props.initialValues._id != null){
+          values._id = this.props.initialValues._id;
+          values.image = this.props.initialValues.image;
+        }
+        this.props.handleSubmit(values);
+      }
+    });
   }
+  handleConfirmBlur = (e) => {
+    const value = e.target.value;
+    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+  }
+
   render() {
-    const { initialValues, handleSubmit, load, pristine, reset, submitting } = this.props
-    return (
-      <form style={listStyle} onSubmit={handleSubmit}>
-        <div>
-        </div>
-        <div>
-          <label>Beer</label>
-          <div>
-            <Field
-              name="name"
-              component="input"
-              type="text"
-            />
-          </div>
-        </div>
-        <div>
-          <label>Brewer</label>
-          <div>
-            <Field
-              name="brewer"
-              component="input"
-              type="text"
-            />
-          </div>
-        </div>
-        <div>
-          <label>ABV</label>
-          <div>
-            <Field
-              name="abv"
-              component="input"
-              type="text"
-            />
-          </div>
-          <Field label="Description" name="description" component="input" />
-        </div>
-        <div>
-          <button type="submit" disabled={pristine || submitting}>
-            Submit
-          </button>
-          <button type="button" disabled={pristine || submitting} onClick={reset}>
-            Undo Changes
-          </button>
-        </div>
-      </form>
-    )
+    const { getFieldDecorator } = this.props.form;
+    const { autoCompleteResult } = this.state;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 6 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 14 }
+      }
+    };
+
+    // labelCol: {
+    //   xs: { span: 24 },
+    //   sm: { span: 8 },
+    // },
+    // wrapperCol: {
+    //   xs: { span: 24 },
+    //   sm: { span: 16 },
+    // },
+  const tailFormItemLayout = {
+    wrapperCol: {
+      xs: {
+        span: 24,
+        offset: 0,
+      },
+      sm: {
+        span: 16,
+        offset: 8,
+      },
+    },
+  };
+
+  let initialValues = this.props.initialValues;
+  console.log("ANT FORM SUBMIT", this.props.handleSubmit);
+
+  return (
+    <div style={formStyle}>
+      <img width={67} height={180} alt="logo" src={initialValues.image} />
+      <Form onSubmit={this.handleSubmit}>
+        <FormItem
+          {...formItemLayout}
+          label="Beer"
+        >
+          {getFieldDecorator('name', {
+            initialValue: initialValues.name
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="Brewer"
+        >
+          {getFieldDecorator('brewer', {
+            initialValue: initialValues.brewer
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="ABV"
+        >
+          {getFieldDecorator('abv', {
+            initialValue: initialValues.abv
+          })(
+            <Input />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="Description"
+        >
+          {getFieldDecorator('description', {
+            initialValue: initialValues.description
+          })(
+            <TextArea />
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="Rating"
+        >
+          {getFieldDecorator('rating', {
+            initialValue: initialValues.rating
+          })(
+            <Rate allowHalf  />
+          )}
+        </FormItem>
+        <FormItem {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit" >AddBeer</Button>
+        </FormItem>
+      </Form>
+    </div>
+  );
   }
 }
 
-// Decorate with reduxForm(). It will read the initialValues prop provided by connect()
-BeerForm = reduxForm({
-  form: 'initializeFromState', // a unique identifier for this formo
-  enableReinitialize : true
-})(BeerForm)
-
-// // You have to connect() to any reducers that you wish to connect to yourself
-// BeerForm = connect(
-//   state => ({
-//     initialValues: state.account.data // pull initial values from account reducer
-//   }),
-//   { load: loadAccount } // bind account loading action creator
-// )(BeerForm)
-
-
-// You have to connect() to any reducers that you wish to connect to yourself
-BeerForm = connect(
-  state => ({
-    initialValues: state.selectedBeer.beer
-  }),
-  dispatch => ({
-    fetchBeer: (beerId) =>  dispatch(fetchBeerIfNeeded(beerId)),
-    newBeer: () => dispatch(newBeer)
-  }) // bind account loading action creator
-)(BeerForm)
-
-export default BeerForm
+export default Form.create()(RegistrationForm);

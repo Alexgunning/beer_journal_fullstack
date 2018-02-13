@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { List, Avatar, Icon } from 'antd';
 
-import Beer from '../components/beer'
 import { fetchBeerListIfNeeded } from '../actions/fetchBeerList'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'

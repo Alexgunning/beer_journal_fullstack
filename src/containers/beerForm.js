@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'
 import { putBeer } from '../actions/putBeer'
-import AntForm from '../components/antForm.js'
+import Form from '../components/beerForm'
 
 const listStyle = {
   width: "20%",
@@ -34,7 +34,7 @@ class BeerForm extends Component {
     }
     else {
       return(
-        <AntForm initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)}/>
+        <Form initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)}/>
       )
     }
   }

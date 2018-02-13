@@ -1,4 +1,3 @@
-import beer from "../components/beer";
 import axios from 'axios';
 
 export const REQUEST_SELECTED_BEER = 'REQUEST_SELECTED_BEER'
@@ -24,7 +23,7 @@ export const requestBeer = beerId => ({
   beerId
 })
 
-export const receiveBeer = (beer, json) => ({
+export const receiveBeer = (json) => ({
   type: RECEIVE_SELECTED_BEER,
   beer: json,
   receivedAt: Date.now()
@@ -33,7 +32,7 @@ export const receiveBeer = (beer, json) => ({
 const fetchBeer = beerId => dispatch => {
   dispatch(requestBeer(beerId))
   return axios.get(`http://127.0.0.1:5000/getBeerById/${beerId}`)
-    .then(res => dispatch(receiveBeer(beer,res.data)), err => console.log("ERR", err))
+    .then(res => dispatch(receiveBeer(res.data)), err => console.log("ERR", err))
 }
 
 const shouldFetchBeer = (state, beer) => {
