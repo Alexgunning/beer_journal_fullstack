@@ -21,7 +21,7 @@ user_schema = {
         "name" : {"type" : "string"},
         "token" : {"type" : "string"}
     },
-    "required": ["_id", "email", "password", "name", "token"]
+    "required": ["_id", "email", "name" ]
 }
 
 login_schema = {

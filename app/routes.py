@@ -4,7 +4,6 @@ import json
 from secrets import token_hex
 from uuid import uuid4
 from flask import Flask, jsonify, request, abort, send_from_directory
-from flask_cors import CORS
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
 from jsonschema import validate, ValidationError
@@ -12,10 +11,6 @@ from app import app, mongo
 from schema import beer_schema, user_schema, login_schema
 from flask_login import UserMixin, current_user, login_user, login_required
 from app import login
-
-@login.user_loader
-def load_user(id):
-    return get_user(id)
 
 class User(UserMixin):
     def __init__(self, **kwargs):
@@ -42,11 +37,17 @@ class User(UserMixin):
 
 
 # app = Flask(__name__)
-CORS(app)
 # bcrypt = Bcrypt(app)
 
+@login.user_loader
+def load_user(id):
+    return get_user(id)
+
+
 def get_user(id):
+    print("GET_USER CALL USER FROM DB FIRST")
     user = mongo.db.users.find_one({"_id": id})
+    print("GET_USER CALL USER FROM DB", user)
     return User(**user)
 
 #TODO convert all aborts to this
@@ -80,20 +81,23 @@ def get_user_id_from_request(req):
         abort(401)
     return user_id
 
-@app.route('/newUser', methods=['POST'])
-def new_user():
+@app.route('/register', methods=['POST'])
+def register():
     try:
         new_user = json.loads(request.data)
     except:
         abort(400)
-    new_user["token"] = generate_token()
     new_user["_id"] = str(uuid4())
     try:
         validate(new_user, user_schema)
     except:
         return abort(400)
-    user_insert = mongo.db.users.insert_one(new_user)
-    return jsonify({"_id": user_insert.inserted_id})
+    user = User(**new_user)
+    user.set_password(new_user["password"])
+    #Pull out the class variables
+    mongo_user = vars(user)
+    user_insert = mongo.db.users.insert_one(mongo_user)
+    return "user registered"
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -107,9 +111,9 @@ def login():
         validate(login, login_schema)
     except:
         return abort(400)
-    user_mongo = monog.db.users.find_one({"email": login["email"] })
+    user_mongo = mongo.db.users.find_one({"email": login["email"] })
     user = User(**user_mongo)
-    if user is None or not user.check_password(form.password.data):
+    if user is None or not user.check_password(login["password"]):
         return "invalid login"
     login_user(user, remember=True)
     return "login success"
