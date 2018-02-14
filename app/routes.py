@@ -1,4 +1,5 @@
 '''routes'''
+from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from secrets import token_hex
 from uuid import uuid4
@@ -9,13 +10,44 @@ from flask_bcrypt import Bcrypt
 from jsonschema import validate, ValidationError
 from app import app, mongo
 from schema import beer_schema, user_schema, login_schema
+from flask_login import UserMixin, current_user, login_user, login_required
+from app import login
 
-# set the project root directory as the static folder, you can set others.
+@login.user_loader
+def load_user(id):
+    return get_user(id)
+
+class User(UserMixin):
+    def __init__(self, **kwargs):
+        self._id = kwargs["_id"]
+        self.email = kwargs["email"]
+        self.name = kwargs["name"]
+        try:
+            self.password_hash = kwargs["password_hash"]
+        except:
+            print("Not sure if always passing in password_hash")
+        try:
+            self.token = kwargs["token"]
+        except:
+            print("Not sure if always passing in token")
+
+    def get_id(self):
+        return self._id
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 # app = Flask(__name__)
 CORS(app)
 # bcrypt = Bcrypt(app)
+
+def get_user(id):
+    user = mongo.db.users.find_one({"_id": id})
+    return User(**user)
 
 #TODO convert all aborts to this
 def bad_request(code, message):
@@ -63,8 +95,10 @@ def new_user():
     user_insert = mongo.db.users.insert_one(new_user)
     return jsonify({"_id": user_insert.inserted_id})
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
+    if current_user.is_authenticated:
+        return "already authenticated"
     try:
         login = json.loads(request.data)
     except:
@@ -73,8 +107,17 @@ def login():
         validate(login, login_schema)
     except:
         return abort(400)
-    token = get_user_token(login["email"], login["password"])
-    return jsonify({"token": token})
+    user_mongo = monog.db.users.find_one({"email": login["email"] })
+    user = User(**user_mongo)
+    if user is None or not user.check_password(form.password.data):
+        return "invalid login"
+    login_user(user, remember=True)
+    return "login success"
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return "logout success"
 
 @app.route('/addBeer', methods=['POST'])
 def add_beer():
@@ -126,3 +169,8 @@ def get_beer_by_id(beer_id):
     if not beer:
         abort(400)
     return jsonify(beer)
+
+@app.route('/')
+@login_required
+def test():
+    return "wooooooo"
