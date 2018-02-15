@@ -1,53 +1,20 @@
 '''routes'''
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
-from secrets import token_hex
 from uuid import uuid4
-from flask import Flask, jsonify, request, abort, send_from_directory
+from flask import Flask, jsonify, request, abort, g
 from flask_pymongo import PyMongo
 from flask_bcrypt import Bcrypt
 from jsonschema import validate, ValidationError
 from app import app, mongo
 from schema import beer_schema, user_schema, login_schema
+from user import User
 from flask_login import UserMixin, current_user, login_user, login_required
 from app import login
-
-class User(UserMixin):
-    def __init__(self, **kwargs):
-        self._id = kwargs["_id"]
-        self.email = kwargs["email"]
-        self.name = kwargs["name"]
-        try:
-            self.password_hash = kwargs["password_hash"]
-        except:
-            print("Not sure if always passing in password_hash")
-        try:
-            self.token = kwargs["token"]
-        except:
-            print("Not sure if always passing in token")
-
-    def get_id(self):
-        return self._id
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-
-# app = Flask(__name__)
-# bcrypt = Bcrypt(app)
-
-@login.user_loader
-def load_user(id):
-    return get_user(id)
-
+from auth import generate_token, requires_auth, verify_token
 
 def get_user(id):
-    print("GET_USER CALL USER FROM DB FIRST")
     user = mongo.db.users.find_one({"_id": id})
-    print("GET_USER CALL USER FROM DB", user)
     return User(**user)
 
 #TODO convert all aborts to this
@@ -55,10 +22,6 @@ def bad_request(code, message):
     response = jsonify({'message': message})
     response.status_code = 400
     return response
-
-##TODO throw errors in getting user ids and tokens and catch them in auth routes to abort(401) instead of in repo functions
-def generate_token():
-    return token_hex(16)
 
 def get_user_id(token):
     user = mongo.db.users.find_one({"token": token})
@@ -94,15 +57,20 @@ def register():
         return abort(400)
     user = User(**new_user)
     user.set_password(new_user["password"])
+    user.token = generate_token()
+
     #Pull out the class variables
     mongo_user = vars(user)
-    user_insert = mongo.db.users.insert_one(mongo_user)
-    return "user registered"
+    try:
+        user_insert = mongo.db.users.insert_one(mongo_user)
+    #TODO figure out more descriptive error
+    except:
+        return bad_request("Dupliciate email", 400)
 
-@app.route('/login', methods=['POST', 'GET'])
+    return jsonify(id=mongo_user["_id"], token=mongo_user["token"])
+
+@app.route("/login", methods=["POST"])
 def login():
-    if current_user.is_authenticated:
-        return "already authenticated"
     try:
         login = json.loads(request.data)
     except:
@@ -110,18 +78,27 @@ def login():
     try:
         validate(login, login_schema)
     except:
-        return abort(400)
-    user_mongo = mongo.db.users.find_one({"email": login["email"] })
-    user = User(**user_mongo)
-    if user is None or not user.check_password(login["password"]):
-        return "invalid login"
-    login_user(user, remember=True)
-    return "login success"
+        return bad_request("Login Parameters not correct", 400)
+    user = User.get_user_with_email_and_password(login["email"], login["password"])
+    if user:
+        return jsonify(token=user._id)
+    return jsonify(error=True), 403
 
 @app.route('/logout')
+@login_required
 def logout():
-    logout_user()
+    
     return "logout success"
+
+# @app.route("/api/is_token_valid", methods=["POST"])
+# def is_token_valid():
+#     incoming = request.get_json()
+#     is_valid = verify_token(incoming["token"])
+
+#     if is_valid:
+#         return jsonify(token_is_valid=True)
+#     else:
+#         return jsonify(token_is_valid=False), 403
 
 @app.route('/addBeer', methods=['POST'])
 def add_beer():
@@ -162,9 +139,9 @@ def put_beer():
     return jsonify(beer)
 
 @app.route('/getBeers')
+@requires_auth
 def get_beers():
-    user_id = get_user_id_from_request(request)
-    beers = mongo.db.beers.find({"user": user_id})
+    beers = mongo.db.beers.find({"user": g.current_user._id })
     return jsonify(list(beers))
 
 @app.route('/getBeerById/<string:beer_id>')
@@ -173,6 +150,7 @@ def get_beer_by_id(beer_id):
     if not beer:
         abort(400)
     return jsonify(beer)
+
 
 @app.route('/')
 @login_required
