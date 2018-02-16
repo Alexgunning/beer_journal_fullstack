@@ -4,14 +4,14 @@ import { Field, reduxForm } from 'redux-form'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'
 import { putBeer } from '../actions/putBeer'
-import Form from '../components/beerForm'
+import BeerForm from '../components/beerForm'
 
 const listStyle = {
   width: "20%",
   margin: "0 auto"
 };
 
-class BeerForm extends Component {
+class BeerFormContainer extends Component {
 
   componentDidMount() {
     let { fetchBeer, newBeer} = this.props;
@@ -35,7 +35,7 @@ class BeerForm extends Component {
     }
     else {
       return(
-        <Form initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)} buttonName={this.props.match.path == "/new" ? "Add Beer": "Update Beer"} />
+        <BeerForm initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)} buttonName={this.props.match.path == "/new" ? "Add Beer": "Update Beer"} />
       )
     }
   }
@@ -43,7 +43,7 @@ class BeerForm extends Component {
 
 
 // You have to connect() to any reducers that you wish to connect to yourself
-BeerForm = connect(
+BeerFormContainer = connect(
   state => ({
     selectedBeer: state.selectedBeer
   }),
@@ -54,6 +54,6 @@ BeerForm = connect(
     handlePutSubmit: (beer) => dispatch(putBeer(beer)),
 
   }) // bind account loading action creator
-)(BeerForm)
+)(BeerFormContainer)
 
-export default BeerForm
+export default BeerFormContainer
