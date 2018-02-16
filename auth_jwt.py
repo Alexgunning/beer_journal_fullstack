@@ -6,7 +6,7 @@ from app import app
 
 TWO_WEEKS = 1209600
 
-def generate_token(user, expiration=TWO_WEEKS):
+def generate_token_jwt(user, expiration=TWO_WEEKS):
     s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
     token = s.dumps({
         '_id': user['_id'],
@@ -15,7 +15,7 @@ def generate_token(user, expiration=TWO_WEEKS):
     return token
 
 
-def verify_token(token):
+def verify_token_jwt(token):
     s = Serializer(app.config['SECRET_KEY'])
     try:
         data = s.loads(token)
@@ -24,7 +24,7 @@ def verify_token(token):
     return data
 
 
-def requires_auth(f):
+def requires_auth_jwt(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = request.headers.get('Authorization', None)
