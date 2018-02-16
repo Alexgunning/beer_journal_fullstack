@@ -2,7 +2,6 @@ import { combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form'
 import { RECEIVE_BEER_LIST, REQUEST_BEER_LIST } from "../actions/fetchBeerList";
 import { REQUEST_SELECTED_BEER, RECEIVE_SELECTED_BEER, NEW_BEER } from "../actions/selectedBeer";
-import beerList from "../containers/beerList";
 
 const beers = (state = {
   isFetching: false,
