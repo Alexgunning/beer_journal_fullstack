@@ -15,7 +15,6 @@ export const requestPostBeer = () => ({
 })
 
 export const postBeer = beer => dispatch => {
-  console.log("POSTING BEER", beer);
   dispatch(requestPostBeer())
   beer.abv = parseFloat(beer.abv);
   beer.rating = parseFloat(beer.rating);
