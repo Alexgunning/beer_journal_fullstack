@@ -17,7 +17,8 @@ const formStyle = {
   padding: "25px"
   // backgroundColor: "#D3D3D3"
 };
-class RegistrationForm extends Component {
+
+class BeerForm extends Component {
   state = {
     confirmDirty: false,
     autoCompleteResult: [],
@@ -126,4 +127,4 @@ class RegistrationForm extends Component {
   }
 }
 
-export default Form.create()(RegistrationForm);
+export default Form.create()(BeerForm);
