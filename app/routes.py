@@ -44,7 +44,7 @@ def register():
         user_insert = mongo.db.users.insert_one(mongo_user)
     #TODO figure out more descriptive error
     except:
-        return bad_request("Dupliciate email", 400)
+        return bad_request(400, "Dupliciate email")
 
     return jsonify(id=mongo_user["_id"], token=mongo_user["token"])
 
@@ -61,7 +61,6 @@ def register_jwt():
         return abort(400)
     user = User(**new_user)
     user.set_password(new_user["password"])
-    user.token = generate_token()
 
     #Pull out the class variables
     mongo_user = vars(user)
@@ -69,9 +68,24 @@ def register_jwt():
         user_insert = mongo.db.users.insert_one(mongo_user)
     #TODO figure out more descriptive error
     except:
-        return bad_request("Dupliciate email", 400)
+        return bad_request(400, "Dupliciate email")
 
-    return jsonify(id=mongo_user["_id"], token=mongo_user["token"])
+    return jsonify(id=mongo_user["_id"], token=generate_token_jwt(mongo_user))
+
+@app.route("/login_jwt", methods=["POST"])
+def login_jwt():
+    incoming = request.get_json()
+    user = User.get_user_with_email_and_password(incoming["email"], incoming["password"])
+    user_map = vars(user)
+    if user:
+        return jsonify(token=generate_token_jwt(user_map))
+
+    return jsonify(error=True), 403
+
+@app.route("/user_jwt", methods=["GET"])
+@requires_auth_jwt
+def get_user_jwt():
+    return jsonify(result=g.current_user)
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -82,7 +96,7 @@ def login():
     try:
         validate(login, login_schema)
     except:
-        return bad_request("Login Parameters not correct", 400)
+        return bad_request(400, "Login Parameters not correct")
     user = User.get_user_with_email_and_password(login["email"], login["password"])
     if user:
         if user.token:

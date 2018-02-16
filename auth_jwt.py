@@ -30,7 +30,7 @@ def requires_auth_jwt(f):
         token = request.headers.get('Authorization', None)
         if token:
             string_token = token.encode('ascii', 'ignore')
-            user = verify_token(string_token)
+            user = verify_token_jwt(string_token)
             if user:
                 g.current_user = user
                 return f(*args, **kwargs)
