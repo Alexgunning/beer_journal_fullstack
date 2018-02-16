@@ -17,7 +17,6 @@ class BeerForm extends Component {
     let { fetchBeer, newBeer} = this.props;
     console.log(this.props.match);
     if (this.props.match.path == "/new") {
-      console.log("NEW COMPONENT DID MOUNT");
       newBeer();
     }
     else {
