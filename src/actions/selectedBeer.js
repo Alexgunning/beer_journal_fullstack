@@ -29,9 +29,13 @@ export const receiveBeer = (json) => ({
   receivedAt: Date.now()
 })
 
+var config = {
+  headers: {'Authorization': '0066950e9d98ae90b8d8b4706e3d0dbc537f85496ad081f0227d2bd79cfeada6'}
+};
+
 const fetchBeer = beerId => dispatch => {
   dispatch(requestBeer(beerId))
-  return axios.get(`http://127.0.0.1:5000/getBeerById/${beerId}`)
+  return axios.get(`http://127.0.0.1:5000/getBeerById/${beerId}`, config)
     .then(res => dispatch(receiveBeer(res.data)), err => console.log("ERR", err))
 }
 
