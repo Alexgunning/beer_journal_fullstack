@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router';
+import axios from 'axios';
 
 export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS'
 export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE'
@@ -7,6 +7,10 @@ export const LOGOUT_USER = 'LOGOUT_USER'
 export const REGISTER_USER_FAILURE = 'REGISTER_USER_FAILURE'
 export const REGISTER_USER_REQUEST = 'REGISTER_USER_REQUEST'
 export const REGISTER_USER_SUCCESS = 'REGISTER_USER_SUCCESS'
+
+function parseJSON(response) {
+    return response.data;
+}
 
 export function loginUserSuccess(token) {
     localStorage.setItem('token', token);
@@ -18,14 +22,14 @@ export function loginUserSuccess(token) {
     };
 }
 
-export function get_token(email, password) {
-    return axios.post('/api/get_token', {
+function get_token(email, password) {
+    return axios.post('http://127.0.0.1:5000/login', {
         email,
         password,
     });
 }
 
-export function create_user(email, password, name) {
+function create_user(email, password, name) {
     return axios.post('/api/create_user', {
         email,
         password,
@@ -60,25 +64,26 @@ export function logout() {
 export function logoutAndRedirect() {
     return (dispatch) => {
         dispatch(logout());
-        browserHistory.push('/');
+        // browserHistory.push('/');
     };
 }
 
 export function redirectToRoute(route) {
     return () => {
-        browserHistory.push(route);
+        // browserHistory.push(route);
     };
 }
 
 export function loginUser(email, password) {
-    return function (dispatch) {
+  return (dispatch) => {
+        console.log("ALEX");
         dispatch(loginUserRequest());
         return get_token(email, password)
             .then(parseJSON)
             .then(response => {
                 try {
                     dispatch(loginUserSuccess(response.token));
-                    browserHistory.push('/main');
+                    // browserHistory.push('/');
                 } catch (e) {
                     alert(e);
                     dispatch(loginUserFailure({
@@ -136,7 +141,7 @@ export function registerUser(email, password) {
             .then(response => {
                 try {
                     dispatch(registerUserSuccess(response.token));
-                    browserHistory.push('/main');
+                    // browserHistory.push('/main');
                 } catch (e) {
                     dispatch(registerUserFailure({
                         response: {
