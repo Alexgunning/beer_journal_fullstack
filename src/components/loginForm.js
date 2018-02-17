@@ -15,23 +15,22 @@ const formStyle = {
 const topStyle = {
   paddingTop: "50px"
 };
-
 const loginForm = {
   maxWidth: "300px"
-}
+};
 const loginFormForgot = {
   float: "right"
-}
+};
 const  loginFormButton = {
   width: "100%"
-}
+};
 
 class NormalLoginForm extends Component {
-  handleSubmit = (e) => {
-    e.preventDefault();
+  handleSubmit = (e) => { e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        console.log(values);
+        this.props.loginUser(values.email, values.password)
       }
     });
   }
@@ -42,7 +41,7 @@ class NormalLoginForm extends Component {
         <div style={formStyle}>
           <Form onSubmit={this.handleSubmit} style={loginForm}>
             <FormItem>
-      {getFieldDecorator('userName', {
+      {getFieldDecorator('email', {
         rules: [{ required: true, message: 'Please input your username!' }],
       })(
         <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />

@@ -12,7 +12,7 @@ import './App.css';
 import reducer from './reducers'
 import Main from './components/main'
 import BeerFormContainer from './containers/beerForm'
-import LoginForm from './components/loginForm'
+import LoginForm from './containers/loginForm'
 
 const middleware = [ thunk ];
 if (process.env.NODE_ENV !== 'production') {
