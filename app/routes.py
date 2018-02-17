@@ -46,7 +46,7 @@ def register():
     except:
         return bad_request(400, "Dupliciate email")
 
-    return jsonify(id=mongo_user["_id"], token=mongo_user["token"])
+    return jsonify(_id=mongo_user["_id"], name=mongo_user["name"], token=mongo_user["token"])
 
 @app.route('/register_jwt', methods=['POST'])
 def register_jwt():
@@ -95,8 +95,9 @@ def login():
         abort(400)
     try:
         validate(login, login_schema)
-    except:
-        return bad_request(400, "Login Parameters not correct")
+    except ValidationError as e:
+        print(e.message)
+        return bad_request(400, e.message)
     user = User.get_user_with_email_and_password(login["email"], login["password"])
     if user:
         if user.token:
@@ -104,7 +105,7 @@ def login():
         else:
             token = generate_token()
             mongo.db.users.update_one({"_id": user._id }, {"$set": {"token" : token}})
-        return jsonify(_id=user._id,token=token)
+        return jsonify(_id=user._id, name=user.name, token=token)
     return jsonify(error=True), 403
 
 @app.route('/logout')
