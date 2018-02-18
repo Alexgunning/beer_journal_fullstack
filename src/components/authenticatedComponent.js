@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { browserHistory } from 'react-router';
-import * as actionCreators from '../actions/auth';
+import * as actionCreators from '../actions/login';
+import { Route, Redirect }from "react-router-dom";
 
 function mapStateToProps(state) {
     return {
         token: state.auth.token,
-        userName: state.auth.userName,
+        email: state.auth.email,
         isAuthenticated: state.auth.isAuthenticated,
     };
 }
@@ -15,7 +15,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(actionCreators, dispatch);
 }
-
 
 export function requireAuthentication(Component) {
     class AuthenticatedComponent extends React.Component {
@@ -34,7 +33,7 @@ export function requireAuthentication(Component) {
             if (!props.isAuthenticated) {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    browserHistory.push('/home');
+                    // browserHistory.push('/home');
                 } else {
                     fetch('/api/is_token_valid', {
                         method: 'post',
@@ -53,8 +52,7 @@ export function requireAuthentication(Component) {
                                 });
 
                             } else {
-                                browserHistory.push('/home');
-
+                                // browserHistory.push('/home');
                             }
                         });
 
@@ -65,24 +63,38 @@ export function requireAuthentication(Component) {
                 });
             }
         }
+                    // {this.props.isAuthenticated && this.state.loaded_if_needed
+                    //     ? <Component {...this.props} />
+                    //     : null
+                    // }
 
         render() {
             return (
                 <div>
-                    {this.props.isAuthenticated && this.state.loaded_if_needed
-                        ? <Component {...this.props} />
-                        : null
+                  <Route
+                    render={props =>
+                        this.props.isAuthenticated ? (
+                          <Component {...props} />
+                        ) : (
+                          <Redirect
+                            to={{
+                              pathname: "/login",
+                              state: { from: props.location }
+                            }}
+                          />
+                        )
                     }
-                </div>
+                  />
+              </div>
             );
 
         }
     }
 
-    AuthenticatedComponent.propTypes = {
-        loginUserSuccess: React.PropTypes.func,
-        isAuthenticated: React.PropTypes.bool,
-    };
+  // AuthenticatedComponent.propTypes = {
+  //   loginUserSuccess: React.PropTypes.func,
+  //   isAuthenticated: React.PropTypes.bool,
+  // };
 
-    return connect(mapStateToProps, mapDispatchToProps)(AuthenticatedComponent);
+  return connect(mapStateToProps, mapDispatchToProps)(AuthenticatedComponent);
 }
