@@ -27,7 +27,7 @@ export function loginUserSuccess(token) {
     };
 }
 
-function get_token(email, password) {
+function login(email, password) {
     return axios.post('http://127.0.0.1:5000/login', {
         email,
         password,
@@ -82,7 +82,7 @@ export function redirectToRoute(route) {
 export function loginUser(email, password) {
   return (dispatch) => {
         dispatch(loginUserRequest());
-        return get_token(email, password)
+        return login(email, password)
             .then(parseJSON)
             .then(response => {
                 try {
@@ -109,33 +109,54 @@ export function loginUser(email, password) {
     };
 }
 
-export function checkTokenRequest() {
-    token = localStorage.getItem('token');
-    return {
-        type: CHECK_LO_TOKEN_REQUEST,
+export function veryifyToken(token) {
+return (dispatch) => {
+        // dispatch(loginUserRequest());
+        // return login(email, password)
+        //     .then(parseJSON)
+        //     .then(response => {
+        //         try {
+        //             dispatch(loginUserSuccess(response.token));
+        //             // browserHistory.push('/');
+        //         } catch (e) {
+        //             alert(e);
+        //             dispatch(loginUserFailure({
+        //                 response: {
+        //                     status: 403,
+        //                     statusText: 'Invalid token',
+        //                 },
+        //             }));
+        //         }
+        //     })
+        //     .catch(error => {
+        //         dispatch(loginUserFailure({
+        //             response: {
+        //                 status: 403,
+        //                 statusText: 'Invalid username or password',
+        //             },
+        //         }));
+        //     });
     };
 }
 
-export function checkLocalToken(email, password) {
+export function checkLocalToken() {
   let token = localStorage.getItem('token');
   if (token != null) {
     return function (dispatch) {
       dispatch(checkLocalTokenSuccess(token));
-      return create_user(email, password)
+      return veryifyToken(token)
     }
   }
   else {
     return function (dispatch) {
       dispatch(checkLocalTokenFailure());
-      return create_user(email, password)
     }
   }
 }
 
 export function checkLocalTokenSuccess(token) {
-    token = localStorage.getItem('token');
     return {
-        type: REGISTER_USER_SUCCESS,
+      type: CHECK_LOCAL_TOKEN_SUCCESS,
         payload: {
             token,
         },
@@ -144,7 +165,7 @@ export function checkLocalTokenSuccess(token) {
 
 export function checkLocalTokenFailure() {
   return {
-    type: CHECK_TOKEN_FAILURE
+    type: CHECK_LOCAL_TOKEN_FAILURE
   };
 }
 
