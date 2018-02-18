@@ -119,7 +119,7 @@ export function loginUser(email, password) {
 
 export function checkToken(token) {
   return (dispatch) => {
-    dispatch(checkTokenRequest());
+    dispatch(checkTokenRequest(token));
     return checkTokenCall(token)
       .then(parseJSON)
       .then(response => {
