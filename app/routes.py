@@ -114,6 +114,10 @@ def logout():
     remove_token(g.current_user._id)
     return "logout success"
 
+@app.route('/checkToken')
+@requires_auth
+def check_token():
+    return jsonify(_id=g.current_user._id, name=g.current_user.name, email=g.current_user.email)
 
 @app.route('/addBeer', methods=['POST'])
 @requires_auth
