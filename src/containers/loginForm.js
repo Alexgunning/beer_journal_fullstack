@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { loginUser } from '../actions/login'
 import LoginForm from '../components/loginForm'
 import { Route, Redirect }from "react-router-dom";
+import AddBeerButton from '../components/addBeerButton.js'
 
 const listStyle = {
   width: "20%",
@@ -27,7 +28,9 @@ class LoginFormContainer extends Component {
 
   render() {
     const {  loginUser, from } = this.props
-    let returnAddress = this.props.location.state ? this.props.location.state.from : "/beer/alex";
+    let returnAddress = this.props.location.state ? this.props.location.state.from : "/";
+    console.log("IS AUTHENTICATED", this.props.isAuthenticated);
+    console.log("RETURN ADDRESS", returnAddress);
     if ( this.props.isAuthenticated ) {
       return (
         <Redirect to={returnAddress} />
@@ -35,7 +38,10 @@ class LoginFormContainer extends Component {
     }
     else
       return (
-        <LoginForm from={from} loginUser={loginUser}/>
+        <div>
+          <LoginForm from={from} loginUser={loginUser}/>
+          <AddBeerButton/>
+        </div>
       )
   }
 }
@@ -50,9 +56,9 @@ const mapDispatchToProps = (dispatch) => ({
   loginUser: (email, password) => dispatch(loginUser(email, password))
 })
 
-// You have to connect() to any reducers that you wish to connect to yourself
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginFormContainer)
+  // You have to connect() to any reducers that you wish to connect to yourself
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(LoginFormContainer)
 
