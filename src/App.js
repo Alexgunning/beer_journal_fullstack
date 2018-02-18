@@ -13,8 +13,8 @@ import reducer from './reducers'
 import Main from './components/main'
 import BeerFormContainer from './containers/beerForm'
 import LoginForm from './containers/loginForm'
-import PrivateRoute from './components/privateRoute'
 import {requireAuthentication} from './components/authenticatedComponent.js'
+import {requireNoAuthentication} from './components/notAuthenticatedComponent.js'
 
 const middleware = [ thunk ];
 if (process.env.NODE_ENV !== 'production') {
@@ -32,10 +32,10 @@ class App extends Component {
       <Provider store={store}>
           <BrowserRouter>
             <div>
-              <Route exact path="/login" component={LoginForm}/>
+              <Route exact path="/login" component={requireNoAuthentication(LoginForm)}/>
               <Route exact path="/" component={requireAuthentication(Main)}/>
               <Route exact path="/new" component={requireAuthentication(BeerFormContainer)}/>
-              <Route exact path="/beer/:id" component={BeerFormContainer}/>
+              <Route exact path="/beer/:id" component={requireAuthentication(BeerFormContainer)}/>
             </div>
           </BrowserRouter>
       </Provider>
