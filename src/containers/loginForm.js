@@ -15,21 +15,13 @@ const listStyle = {
 class LoginFormContainer extends Component {
 
   componentDidMount() {
-    const { dispatch, checkLocalToken } = this.props
-    checkLocalToken()
+    const { dispatch, checkLocalToken, isAuthenticated } = this.props
+    // if (!isAuthenticated)
+    //   checkLocalToken()
   }
 
   render() {
-    const {  loginUser, from } = this.props
-    let returnAddress = this.props.location.state ? this.props.location.state.from : "/";
-    console.log("IS AUTHENTICATED", this.props.isAuthenticated);
-    console.log("RETURN ADDRESS", returnAddress);
-    if ( this.props.isAuthenticated ) {
-      return (
-        <Redirect to={returnAddress} />
-      )
-    }
-    else
+    const {  loginUser, from, isAuthenticated } = this.props
       return (
         <div>
           <LoginForm from={from} loginUser={loginUser}/>
