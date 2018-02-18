@@ -14,6 +14,7 @@ import Main from './components/main'
 import BeerFormContainer from './containers/beerForm'
 import LoginForm from './containers/loginForm'
 import PrivateRoute from './components/privateRoute'
+import {requireAuthentication} from './components/authenticatedComponent.js'
 
 const middleware = [ thunk ];
 if (process.env.NODE_ENV !== 'production') {
@@ -31,9 +32,9 @@ class App extends Component {
       <Provider store={store}>
           <BrowserRouter>
             <div>
-              <PrivateRoute exact path="/" component={Main}/>
               <Route exact path="/login" component={LoginForm}/>
-              <Route exact path="/new" component={BeerFormContainer}/>
+              <Route exact path="/" component={requireAuthentication(Main)}/>
+              <Route exact path="/new" component={requireAuthentication(BeerFormContainer)}/>
               <Route exact path="/beer/:id" component={BeerFormContainer}/>
             </div>
           </BrowserRouter>
