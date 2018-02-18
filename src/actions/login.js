@@ -76,7 +76,6 @@ export function redirectToRoute(route) {
 
 export function loginUser(email, password) {
   return (dispatch) => {
-        console.log("ALEX");
         dispatch(loginUserRequest());
         return get_token(email, password)
             .then(parseJSON)
