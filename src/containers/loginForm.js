@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { loginUser } from '../actions/login'
 import LoginForm from '../components/loginForm'
 import { Route, Redirect }from "react-router-dom";
+import * as actionCreators from '../actions/login';
 import AddBeerButton from '../components/addBeerButton.js'
 
 const listStyle = {
@@ -11,20 +13,11 @@ const listStyle = {
 };
 
 class LoginFormContainer extends Component {
-  // render() {
-  //   const { from } = this.props.location.state || { from: { pathname: "/" } };
-  //   const { redirectToReferrer } = this.state;
 
-  //   if (redirectToReferrer) {
-  //     return <Redirect to={from} />;
-  //   }
-
-  //   return (
-  //     <div>
-  //       <p>You must log in to view the page at {from.pathname}</p>
-  //       <button onClick={this.login}>Log in</button>
-  //     </div>
-  //   );
+  componentDidMount() {
+    const { dispatch, checkLocalToken } = this.props
+    checkLocalToken()
+  }
 
   render() {
     const {  loginUser, from } = this.props
@@ -52,13 +45,12 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  loginUser: (email, password) => dispatch(loginUser(email, password))
-})
+const mapDispatchToProps = (dispatch) => (bindActionCreators(actionCreators, dispatch)
+)
 
-  // You have to connect() to any reducers that you wish to connect to yourself
-  export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(LoginFormContainer)
+// You have to connect() to any reducers that you wish to connect to yourself
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginFormContainer)
 
