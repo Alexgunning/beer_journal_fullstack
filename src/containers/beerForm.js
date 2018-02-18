@@ -34,6 +34,7 @@ class BeerFormContainer extends Component {
       )
     }
     else {
+      //TODO set a variable and clean this up
       return(
         <BeerForm initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)} buttonName={this.props.match.path == "/new" ? "Add Beer": "Update Beer"} />
       )
