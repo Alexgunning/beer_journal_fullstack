@@ -14,12 +14,6 @@ const listStyle = {
 
 class LoginFormContainer extends Component {
 
-  componentDidMount() {
-    const { dispatch, checkLocalToken, isAuthenticated } = this.props
-    // if (!isAuthenticated)
-    //   checkLocalToken()
-  }
-
   render() {
     const {  loginUser, from, isAuthenticated } = this.props
       return (
