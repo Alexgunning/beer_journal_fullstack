@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/login';
 import { Route, Redirect }from "react-router-dom";
+import NavigationBar from './navigationBar'
 
 export function requireAuthentication(Component) {
   class AuthenticatedComponent extends React.Component {
@@ -22,7 +23,10 @@ export function requireAuthentication(Component) {
             <Route
               render={props =>
                   this.props.isAuthenticated ? (
-                    <Component {...props} />
+                    <div>
+                      <NavigationBar />
+                      <Component {...props} />
+                    </div>
                   ) : (
                     <Redirect
                       to={{
