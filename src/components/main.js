@@ -4,7 +4,6 @@ import AddBeerButton from '../components/addBeerButton.js'
 
 const Main = () => (
   <main>
-   <AddBeerButton/>
    <BeerListContainer/>
   </main>
 )

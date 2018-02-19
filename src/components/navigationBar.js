@@ -1,7 +1,7 @@
 import React from 'react'
 import BeerForm from './beerForm'
 
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Dropdown } from 'antd';
 import { Row, Col } from 'antd';
 
 const SubMenu = Menu.SubMenu;
@@ -13,6 +13,18 @@ const headerStyle = {
   height: "70px",
   borderBottom: "2px solid #d9d9d9",
 }
+
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">Profile</a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">Logout</a>
+    </Menu.Item>
+  </Menu>
+);
+
 
 const titleStyle = {
   fontSize: "3vw",
@@ -29,6 +41,9 @@ const title = {
   flex: 1,
   fontSize: "3vw",
 }
+const titleText = {
+  // color: "#40A9FF",
+}
 const userImage = {
   width: "100px",
 }
@@ -42,13 +57,15 @@ const NavigationBar = () => (
   <div style={headerStyle}>
     <div style={parent}>
       <div style={beerIcon}>
-        <img style={img} src={"./beer2.png"} />
+        <img style={img} src={"./beerblue2.png"} />
       </div>
 
-      <div style={title}><strong>Beer Journal</strong></div>
+      <div style={title}><strong><p style={titleText}>Beer Journal</p></strong></div>
 
       <div style={userImage}>
-        <img style={img} src={"./user2.png"} />
+        <Dropdown overlay={menu}>
+          <img style={img} src={"./userblue2.png"} />
+        </Dropdown>
       </div>
     </div>
   </div>

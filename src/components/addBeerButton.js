@@ -4,19 +4,15 @@ import { Button } from 'antd';
 
 const buttonStyle = {
   width: "15%",
-  margin: "auto",
-  "text-align": "center"
+  margin: "6px",
+  "text-align": "center",
 }
 
 // const Beer = ({  createNewBeer, dispatch }) => (
 const AddBeerButton = () => (
   <div  style={buttonStyle}>
  <Route render={({history}) => (
-   <Button type='primary'
-     onClick={() => { history.push('/new') }}
-    >
-      Add Beer
-    </Button>
+   <Button style={{background: "#40A9FF"}} icon="plus"  onClick={() => { history.push('/new') }}/>
   )} />
   </div>
 )
