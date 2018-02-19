@@ -13,39 +13,43 @@ export function requireAuthentication(Component) {
     }
 
     render() {
-      return (
-        <div>
-          <Route
-            render={props =>
-                this.props.isAuthenticated ? (
-                  <Component {...props} />
-                ) : (
-                  <Redirect
-                    to={{
-                      pathname: "/login",
-                      state: { from: props.location }
-                    }}
-                  />
-                )
-            }
-          />
-        </div>
-      );
+
+      if (this.props.isAuthenticating)
+        return(<div></div>)
+      else
+        return (
+          <div>
+            <Route
+              render={props =>
+                  this.props.isAuthenticated ? (
+                    <Component {...props} />
+                  ) : (
+                    <Redirect
+                      to={{
+                        pathname: "/login",
+                        state: { from: props.location }
+                      }}
+                    />
+                  )
+              }
+            />
+          </div>
+        );
 
     }
   }
 
-function mapStateToProps(state) {
+  function mapStateToProps(state) {
     return {
-        token: state.auth.token,
-        email: state.auth.email,
+      token: state.auth.token,
+      email: state.auth.email,
       isAuthenticated: state.auth.isAuthenticated,
     };
-}
+  }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(actionCreators, dispatch);
-}
+  function mapDispatchToProps(dispatch) {
+    return bindActionCreators(actionCreators, dispatch);
+  }
 
   return connect(mapStateToProps, mapDispatchToProps)(AuthenticatedComponent);
 }

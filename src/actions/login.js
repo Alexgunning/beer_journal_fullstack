@@ -19,6 +19,7 @@ function parseJSON(response) {
 
 export function loginUserSuccess(token) {
   localStorage.setItem('token', token);
+  axios.defaults.headers.common['Authorization'] = token;
   return {
     type: LOGIN_USER_SUCCESS,
     payload: {
@@ -51,7 +52,7 @@ function create_user(email, password, name) {
 }
 
 export function loginUserFailure(error) {
-  localStorage.removeItem('token');
+  // localStorage.removeItem('token');
   return {
     type: LOGIN_USER_FAILURE,
     payload: {
@@ -68,7 +69,8 @@ export function loginUserRequest() {
 }
 
 export function logout() {
-  localStorage.removeItem('token');
+  // localStorage.removeItem('token');
+  // delete axios.defaults.headers.common['Authorization'];
   return {
     type: LOGOUT_USER,
   };
@@ -124,7 +126,7 @@ export function checkToken(token) {
       .then(parseJSON)
       .then(response => {
         try {
-          dispatch(checkTokenSuccess(response.token));
+          dispatch(checkTokenSuccess(token));
           // browserHistory.push('/');
         } catch (e) {
           alert(e);
@@ -185,7 +187,8 @@ export function checkTokenRequest() {
 
 export function checkTokenSuccess(token) {
   //TODO keep or remove im torn
-  // localStorage.setItem('token', token);
+  localStorage.setItem('token', token);
+  axios.defaults.headers.common['Authorization'] = token;
   return {
     type: CHECK_TOKEN_SUCCESS,
     payload: {
@@ -211,29 +214,30 @@ export function registerUserRequest() {
   };
 }
 
-export function registerUserSuccess(token) {
-  localStorage.setItem('token', token);
-  return {
-    type: REGISTER_USER_SUCCESS,
-    payload: {
-      token,
-    },
-  };
-}
+// export function registerUserSuccess(token) {
+//   localStorage.setItem('token', token);
+//   axios.defaults.headers.common['Authorization'] = token;
+//   return {
+//     type: REGISTER_USER_SUCCESS,
+//     payload: {
+//       token,
+//     },
+//   };
+// }
 
-export function registerUserFailure(error) {
-  localStorage.removeItem('token');
-  return {
-    type: REGISTER_USER_FAILURE,
-    payload: {
-      status: error.response.status,
-      statusText: error.response.statusText,
-    },
-  };
-}
+// export function registerUserFailure(error) {
+//   localStorage.removeItem('token');
+//   return {
+//     type: REGISTER_USER_FAILURE,
+//     payload: {
+//       status: error.response.status,
+//       statusText: error.response.statusText,
+//     },
+//   };
+// }
 
-export function registerUser(email, password) {
-  return function (dispatch) {
+// export function registerUser(email, password) {
+//   return function (dispatch) {
     // dispatch(registerUserRequest());
     // return create_user(email, password)
     //   .then(parseJSON)
@@ -259,6 +263,6 @@ export function registerUser(email, password) {
     //     }
     //     ));
     //   });
-  };
-}
+  // };
+// }
 

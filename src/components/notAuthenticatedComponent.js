@@ -14,23 +14,28 @@ export function requireNoAuthentication(Component) {
 
     render() {
     let returnAddress = this.props.location.state ? this.props.location.state.from : "/";
-      return (
-        <div>
-          <Route
-            render={props =>
-                !this.props.isAuthenticated  ? (
-                  <Component {...props} />
-                ) : (
-                  <Redirect
-                    to={{
-                      pathname:"/"
-                    }}
-                  />
-                )
-            }
-          />
-        </div>
-      );
+
+      if (this.props.isAuthenticating)
+        return(<div></div>)
+      else
+        return (
+          <div>
+            <Route
+              render={props =>
+                  !this.props.isAuthenticated  ? (
+                    <Component {...props} />
+                  ) : (
+                    <Redirect
+                      to={{
+                        pathname:"/"
+                      }}
+                    />
+                  )
+              }
+            />
+          </div>
+        );
+
 
     }
   }
@@ -40,6 +45,7 @@ export function requireNoAuthentication(Component) {
       token: state.auth.token,
       email: state.auth.email,
       isAuthenticated: state.auth.isAuthenticated,
+      isAuthenticating: state.auth.isAuthenticating,
     };
   }
 
