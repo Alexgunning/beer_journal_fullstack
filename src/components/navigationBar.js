@@ -28,7 +28,6 @@ const menu = (
 
 const titleStyle = {
   fontSize: "3vw",
-
 }
 
 const parent =  {
@@ -42,18 +41,28 @@ const title = {
   fontSize: "3vw",
 }
 const titleText = {
-  // color: "#40A9FF",
+  color: "#40A9FF",
 }
 const userImage = {
-  width: "100px",
+    width: "58px",
+    marginRight: "20px"
 }
+
+const userText = {
+  fontSize: "1vw",
+  width: "180px",
+  textAlign: "right",
+  marginTop: "23px",
+  marginRight: "5px"
+}
+
 const img = {
-    marginTop:"7px",
-    marginBottom:"7px"
+  marginTop:"7px",
+  marginBottom:"7px"
 }
 
 //
-const NavigationBar = () => (
+const NavigationBar = ({name}) => (
   <div style={headerStyle}>
     <div style={parent}>
       <div style={beerIcon}>
@@ -62,6 +71,7 @@ const NavigationBar = () => (
 
       <div style={title}><strong><p style={titleText}>Beer Journal</p></strong></div>
 
+      <div style={userText}>Alex Gunning</div>
       <div style={userImage}>
         <Dropdown overlay={menu}>
           <img style={img} src={"./userblue2.png"} />

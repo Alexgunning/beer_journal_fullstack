@@ -60,7 +60,6 @@ class BeerForm extends Component {
     }
 
     let initialValues = this.props.initialValues;
-    console.log("ANT FORM SUBMIT", this.props.handleSubmit);
 
     return (
       <div style={formPadStyle}>
