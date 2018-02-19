@@ -155,7 +155,6 @@ def put_beer():
     try:
         mongo.db.beers.insert_one(beer)
     except:
-        print("update one")
         mongo.db.beers.update_one({"_id": beer["_id"]}, {"$set": beer})
     return jsonify(beer)
 
