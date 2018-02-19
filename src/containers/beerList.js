@@ -17,7 +17,7 @@ const listStyle = {
 };
 
 const listItemStyle = {
-  background: "#fbfbfb",
+  background: "#fafafa",
   border: "1px solid #d9d9d9",
   "border-radius": "6px",
   "padding": "12px",
