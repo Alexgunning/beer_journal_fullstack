@@ -117,7 +117,7 @@ def logout():
 @app.route('/checkToken')
 @requires_auth
 def check_token():
-    return jsonify(_id=g.current_user._id, name=g.current_user.name, email=g.current_user.email)
+    return jsonify(_id=g.current_user._id, name=g.current_user.name, email=g.current_user.email, token=g.current_user.token)
 
 @app.route('/addBeer', methods=['POST'])
 @requires_auth
