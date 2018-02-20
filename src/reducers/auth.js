@@ -18,6 +18,7 @@ import {
 const initialState = {
   token: null,
   email: null,
+  name: null,
   isAuthenticated: false,
   isAuthenticating: false,
   statusText: null,
