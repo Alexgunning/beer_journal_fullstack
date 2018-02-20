@@ -48,6 +48,7 @@ export function requireAuthentication(Component) {
       token: state.auth.token,
       email: state.auth.email,
       isAuthenticated: state.auth.isAuthenticated,
+      name: state.auth.name,
     };
   }
 
