@@ -5,7 +5,6 @@ import { loginUser } from '../actions/login'
 import LoginForm from '../components/loginForm'
 import { Route, Redirect }from "react-router-dom";
 import * as actionCreators from '../actions/login';
-import AddBeerButton from '../components/addBeerButton.js'
 
 const listStyle = {
   width: "20%",
@@ -19,7 +18,6 @@ class LoginFormContainer extends Component {
       return (
         <div>
           <LoginForm from={from} loginUser={loginUser}/>
-          <AddBeerButton/>
         </div>
       )
   }
