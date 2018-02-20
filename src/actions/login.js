@@ -17,17 +17,6 @@ function parseJSON(response) {
   return response.data;
 }
 
-export function loginUserSuccess(token) {
-  localStorage.setItem('token', token);
-  axios.defaults.headers.common['Authorization'] = token;
-  return {
-    type: LOGIN_USER_SUCCESS,
-    payload: {
-      token,
-    },
-  };
-}
-
 function login(email, password) {
   return axios.post('http://127.0.0.1:5000/login', {
     email,
@@ -58,6 +47,17 @@ export function loginUserFailure(error) {
     payload: {
       status: error.response.status,
       statusText: error.response.statusText,
+    },
+  };
+}
+
+export function loginUserSuccess(payload) {
+  localStorage.setItem('token', payload.token);
+  axios.defaults.headers.common['Authorization'] = payload.token;
+  return {
+    type: LOGIN_USER_SUCCESS,
+    payload: {
+      payload,
     },
   };
 }
@@ -96,7 +96,7 @@ export function loginUser(email, password) {
       .then(parseJSON)
       .then(response => {
         try {
-          dispatch(loginUserSuccess(response.token));
+          dispatch(loginUserSuccess(response));
           // browserHistory.push('/');
         } catch (e) {
           alert(e);
@@ -126,7 +126,7 @@ export function checkToken(token) {
       .then(parseJSON)
       .then(response => {
         try {
-          dispatch(checkTokenSuccess(token));
+          dispatch(checkTokenSuccess(response));
           // browserHistory.push('/');
         } catch (e) {
           alert(e);
@@ -185,14 +185,14 @@ export function checkTokenRequest() {
   };
 }
 
-export function checkTokenSuccess(token) {
+export function checkTokenSuccess(payload) {
   //TODO keep or remove im torn
-  localStorage.setItem('token', token);
-  axios.defaults.headers.common['Authorization'] = token;
+  localStorage.setItem('token', payload.token);
+  axios.defaults.headers.common['Authorization'] = payload.token;
   return {
     type: CHECK_TOKEN_SUCCESS,
     payload: {
-      token,
+      payload,
     },
   };
 }
