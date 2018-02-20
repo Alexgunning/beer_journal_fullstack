@@ -56,9 +56,7 @@ export function loginUserSuccess(payload) {
   axios.defaults.headers.common['Authorization'] = payload.token;
   return {
     type: LOGIN_USER_SUCCESS,
-    payload: {
-      payload,
-    },
+    payload: payload
   };
 }
 
@@ -191,9 +189,7 @@ export function checkTokenSuccess(payload) {
   axios.defaults.headers.common['Authorization'] = payload.token;
   return {
     type: CHECK_TOKEN_SUCCESS,
-    payload: {
-      payload,
-    },
+    payload: payload,
   };
 }
 
