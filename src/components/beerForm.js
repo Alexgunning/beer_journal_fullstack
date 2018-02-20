@@ -11,7 +11,7 @@ const formPadStyle = {
 const formStyle = {
   background: "#fbfbfb",
   border: "1px solid #d9d9d9",
-  "border-radius": "6px",
+  borderRadius: "6px",
   width: "50%",
   margin: "0 auto",
   padding: "25px"
@@ -27,7 +27,6 @@ class BeerForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         //TODO FIGURE OUT A BETTE WAY TO DO THIS
         if (this.props.initialValues._id != null){
           values._id = this.props.initialValues._id;

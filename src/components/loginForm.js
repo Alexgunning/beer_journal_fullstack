@@ -6,7 +6,7 @@ const FormItem = Form.Item;
 const formStyle = {
   background: "#fbfbfb",
   border: "1px solid #d9d9d9",
-  "border-radius": "6px",
+  borderRadius: "6px",
   width: "20%",
   margin: "0 auto",
   padding: "25px"
@@ -29,7 +29,6 @@ class NormalLoginForm extends Component {
   handleSubmit = (e) => { e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log(values);
         this.props.loginUser(values.email, values.password)
       }
     });

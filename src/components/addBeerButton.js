@@ -5,7 +5,7 @@ import { Button } from 'antd';
 const buttonStyle = {
   width: "15%",
   margin: "6px",
-  "text-align": "center",
+  textAlign: "center"
 }
 
 // const Beer = ({  createNewBeer, dispatch }) => (

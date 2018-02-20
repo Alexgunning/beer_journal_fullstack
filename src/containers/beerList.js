@@ -13,7 +13,7 @@ import AddBeerButton from '../components/addBeerButton'
 
 const listStyle = {
   maxWidth: "60%",
-  "padding-bottom": "30px"
+  paddingBottom: "30px"
 };
 
 const outside = {
@@ -24,8 +24,8 @@ const outside = {
 const listItemStyle = {
   background: "#fafafa",
   border: "1px solid #d9d9d9",
-  "border-radius": "6px", "padding": "12px",
-  "margin": "6px"
+  borderRadius: "6px", "padding": "12px",
+  margin: "6px"
 };
 
 const IconText = ({ type, text }) => (
@@ -55,7 +55,7 @@ class BeerList extends Component {
       name: PropTypes.string.isRequired,
       brewer: PropTypes.string.isRequired,
       abv: PropTypes.number.isRequired,
-      imgage: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired
     }).isRequired).isRequired,
     dispatch: PropTypes.func.isRequired
@@ -85,10 +85,9 @@ class BeerList extends Component {
                     onClick={()=> {history.push(`beer/${beer._id}`)}}
                     extra={<img width={67} height={180} alt="logo" src={beer.image} />}
                   >
-                  <List.Item.Meta
-                    title={beer.name}
-                    description={beer.brewer}
-                    bordered={true}
+                    <List.Item.Meta
+                      title={beer.name}
+                      description={beer.brewer}
                   />
                   {beer.description}
                   </List.Item>
