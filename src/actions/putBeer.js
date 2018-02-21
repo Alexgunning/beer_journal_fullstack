@@ -18,7 +18,6 @@ export const putBeer = beer => dispatch => {
   dispatch(requestPutBeer())
   beer.abv = parseFloat(beer.abv);
   beer.rating = parseFloat(beer.rating);
-  beer.image = null;
   return axios.put('http://127.0.0.1:5000/putBeer',beer)
     .then(res => { console.log("put", res);
        receivePutBeerAction(res.data);
