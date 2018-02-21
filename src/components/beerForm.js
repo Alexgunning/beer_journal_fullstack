@@ -52,10 +52,16 @@ class BeerForm extends Component {
     }
 
     const tailFormItemLayout = {
-      wrapperCol: {
-        span: 12,
-        offset: 6,
-      },
+      padding: "10px"
+    }
+
+    const buttonRow = {
+      display: "flex",
+      justifyContent: "center",
+    }
+
+    const buttonItem = {
+      margin: "20px"
     }
 
     let initialValues = this.props.initialValues;
@@ -115,9 +121,14 @@ class BeerForm extends Component {
                 <Rate allowHalf  />
               )}
             </FormItem>
-            <FormItem {...tailFormItemLayout}>
-              <Button type="primary" htmlType="submit" >{buttonName}</Button>
-            </FormItem>
+            <div style={buttonRow} id="button-row">
+              <FormItem {...tailFormItemLayout}>
+                <Button style={buttonItem} type="primary" htmlType="submit" >{buttonName}</Button>
+              </FormItem>
+              <FormItem {...tailFormItemLayout}>
+                <Button style={buttonItem} type="danger" htmlType="submit" >Cancel</Button>
+              </FormItem>
+            </div>
           </Form>
         </div>
       </div>
