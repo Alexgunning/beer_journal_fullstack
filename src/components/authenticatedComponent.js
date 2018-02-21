@@ -24,7 +24,7 @@ export function requireAuthentication(Component) {
               render={props =>
                   this.props.isAuthenticated ? (
                     <div>
-                      <NavigationBar />
+                      <NavigationBar name={this.props.name} />
                       <Component {...props} />
                     </div>
                   ) : (

@@ -71,7 +71,7 @@ const NavigationBar = ({name}) => (
 
       <div style={title}><strong><p style={titleText}>Beer Journal</p></strong></div>
 
-      <div style={userText}>Alex Gunning</div>
+      <div style={userText}>{name}</div>
       <div style={userImage}>
         <Dropdown overlay={menu}>
           <img style={img} src={"./userblue2.png"} />
