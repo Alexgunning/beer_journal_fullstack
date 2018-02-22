@@ -45,7 +45,7 @@ const beerIcon = {
 
 const title = {
   flex: 1,
-  fontSize: "3vw",
+  fontSize: "55px",
 }
 
 const titleText = {
@@ -58,7 +58,7 @@ const userImage = {
 }
 
 const userText = {
-  fontSize: "1vw",
+  fontSize: "20px",
   width: "180px",
   textAlign: "right",
   marginTop: "23px",
