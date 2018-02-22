@@ -18,7 +18,6 @@ export const postBeer = beer => dispatch => {
   dispatch(requestPostBeer())
   beer.abv = parseFloat(beer.abv);
   beer.rating = parseFloat(beer.rating);
-  beer.image = null;
   return axios.post('http://127.0.0.1:5000/addBeer',beer)
     .then(res => { console.log("post", res);
        receivePostBeerAction(res.data);

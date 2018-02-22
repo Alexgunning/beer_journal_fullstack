@@ -113,6 +113,16 @@ class BeerForm extends Component {
               </FormItem>
               <FormItem
                 {...formItemLayout}
+                label="Image"
+              >
+                {getFieldDecorator('image', {
+                  initialValue: initialValues.image
+                })(
+                  <Input />
+                )}
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
                 label="Description"
               >
                 {getFieldDecorator('description', {
