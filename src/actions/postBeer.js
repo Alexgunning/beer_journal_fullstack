@@ -19,7 +19,7 @@ export const postBeer = beer => dispatch => {
   beer.abv = parseFloat(beer.abv);
   beer.rating = parseFloat(beer.rating);
   return axios.post('http://127.0.0.1:5000/addBeer',beer)
-    .then(res => { console.log("post", res);
+    .then(res => {
        receivePostBeerAction(res.data);
     }
     ,err => console.log("Error Post:", err))
