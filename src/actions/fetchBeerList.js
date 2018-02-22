@@ -15,9 +15,12 @@ export const receiveBeerList = json => ({
   receivedAt: Date.now()
 })
 
-const fetchBeers = () => dispatch => {
+const fetchBeers = (search) => dispatch => {
+  let params = {}
+  if (search)
+    params.search = search
   dispatch(requestBeerList())
-  return axios.get('http://127.0.0.1:5000/getBeers')
+  return axios.get('http://127.0.0.1:5000/getBeers', { params })
     .then(res => dispatch(receiveBeerList(res.data)))
 }
 
