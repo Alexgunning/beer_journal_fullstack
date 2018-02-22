@@ -35,8 +35,8 @@ const shouldFetchBeers = (state) => {
   return true;
 }
 
-export const fetchBeerListIfNeeded = () => (dispatch, getState) => {
+export const fetchBeerListIfNeeded = (search) => (dispatch, getState) => {
   if (shouldFetchBeers(getState())) {
-    return dispatch(fetchBeers())
+    return dispatch(fetchBeers(search))
   }
 }
