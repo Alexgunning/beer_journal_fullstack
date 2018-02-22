@@ -24,7 +24,7 @@ export function requireAuthentication(Component) {
               render={props =>
                   this.props.isAuthenticated ? (
                     <div>
-                      <NavigationBar name={this.props.name} />
+                      <NavigationBar name={this.props.name} logout={this.props.logout} viewProfile={() => console.log("TODO Implement view profile")}/>
                       <Component {...props} />
                     </div>
                   ) : (

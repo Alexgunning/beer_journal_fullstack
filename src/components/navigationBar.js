@@ -14,17 +14,22 @@ const headerStyle = {
   borderBottom: "2px solid #d9d9d9",
 }
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">Profile</a>
+const menu = ({ logout, viewProfile }) => (
+  <Menu
+    onClick={({ key }) => {
+      if (key == "logout")
+        logout()
+      else if (key == "profile")
+        viewProfile()
+  }} >
+    <Menu.Item key="profile">
+       <div>Profile</div>
     </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">Logout</a>
+    <Menu.Item key="logout">
+      <div>Logout</div>
     </Menu.Item>
   </Menu>
 );
-
 
 const titleStyle = {
   fontSize: "3vw",
@@ -33,19 +38,23 @@ const titleStyle = {
 const parent =  {
   "display": "flex"
 }
+
 const beerIcon = {
   width: "58px",
 }
+
 const title = {
   flex: 1,
   fontSize: "3vw",
 }
+
 const titleText = {
   color: "#40A9FF",
 }
+
 const userImage = {
-    width: "58px",
-    marginRight: "20px"
+  width: "58px",
+  marginRight: "20px"
 }
 
 const userText = {
@@ -62,7 +71,7 @@ const img = {
 }
 
 //
-const NavigationBar = ({name}) => (
+const NavigationBar = ({name, logout, viewProfile}) => (
   <div style={headerStyle}>
     <div style={parent}>
       <div style={beerIcon}>
@@ -73,7 +82,7 @@ const NavigationBar = ({name}) => (
 
       <div style={userText}>{name}</div>
       <div style={userImage}>
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={menu({logout, viewProfile})} >
           <img style={img} src={"./userblue2.png"} />
         </Dropdown>
       </div>

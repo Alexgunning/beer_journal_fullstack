@@ -67,8 +67,8 @@ export function loginUserRequest() {
 }
 
 export function logout() {
-  // localStorage.removeItem('token');
-  // delete axios.defaults.headers.common['Authorization'];
+  localStorage.removeItem('token');
+  delete axios.defaults.headers.common['Authorization'];
   return {
     type: LOGOUT_USER,
   };
