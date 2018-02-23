@@ -88,6 +88,7 @@ class BeerList extends Component {
     dispatch(fetchBeerListIfNeeded())
   }
 
+   // extra={<div>rating {beer.rating}*</div>}
 
   render() {
     if (true)
