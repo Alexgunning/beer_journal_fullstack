@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { List, Card,  Avatar, Icon } from 'antd';
+import { List, Card,  Avatar, Icon, Rate } from 'antd';
 
 import { fetchBeerListIfNeeded } from '../actions/fetchBeerList'
 import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
@@ -12,6 +12,7 @@ import { Route } from 'react-router-dom'
 import AddBeerButton from '../components/addBeerButton'
 
 const { Meta } = Card;
+
 
 const listStyle = {
   maxWidth: "60%",
@@ -42,6 +43,11 @@ const parent =  {
   display: "flex",
   justifyContent: "center",
 }
+
+const parentImageCard =  {
+  display: "flex",
+  padding: "5px",
+}
 const parentCard =  {
   display: "flex",
   justifyContent: "center",
@@ -68,6 +74,27 @@ const cardContainerStyle = {
   margin: "0 auto"
 };
 
+const parentTitle = {
+  display: "flex",
+}
+
+const middleTitle = {
+  flex: 1,
+}
+
+const Title = ({ beer, rating }) => (
+  <div style={parentTitle}>
+    <div>
+      {beer}
+    </div>
+    <div style={middleTitle}>
+    </div>
+    <div>
+      <Rate disabled defaultValue={rating} />
+    </div>
+  </div>
+)
+
 
 class BeerList extends Component {
 
@@ -88,10 +115,10 @@ class BeerList extends Component {
     dispatch(fetchBeerListIfNeeded())
   }
 
-   // extra={<div>rating {beer.rating}*</div>}
+  // extra={<div>rating {beer.rating}*</div>}
 
   render() {
-    if (true)
+    if (false)
       return (
         <div style={parent}>
           <div style={cardContainerStyle}>
@@ -140,7 +167,7 @@ class BeerList extends Component {
                       extra={<img width={67} height={180} alt="logo" src={beer.image} />}
                     >
                       <List.Item.Meta
-                        title={beer.name}
+                        title={<Title beer={beer.name} rating={beer.rating}/>}
                         description={beer.brewer}
                       />
                       {beer.description}
