@@ -12,7 +12,9 @@ const buttonStyle = {
 const AddBeerButton = () => (
   <div  style={buttonStyle}>
  <Route render={({history}) => (
-   <Button style={{background: "#40A9FF", color: "#FFFFFF"}} icon="plus" size="large" onClick={() => { history.push('/new') }}/>
+   <Button style={{background: "#40A9FF", color: "#FFFFFF"}} size="large" onClick={() => { history.push('/new') }}>
+    Add Beer
+   </Button>
   )} />
   </div>
 )
