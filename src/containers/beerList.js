@@ -47,6 +47,7 @@ const title = {
   flex: 1,
   fontSize: "3vw",
 }
+
 class BeerList extends Component {
 
   static propTypes = {

@@ -24,6 +24,7 @@ class BeerFormContainer extends Component {
       fetchBeer(beerId)
     }
   }
+
   render() {
     const { selectedBeer, handlePostSubmit, handlePutSubmit, load, pristine, reset, submitting } = this.props
     if (selectedBeer.loading){
