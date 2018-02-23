@@ -14,11 +14,6 @@ const parent =  {
 
 class SearchBar extends Component {
 
-  // componentDidMount() {
-  //   const { dispatch } = this.props
-  //   dispatch(fetchBeerListIfNeeded())
-  // }
-
   render() {
     return (
       <div style={parent}>
