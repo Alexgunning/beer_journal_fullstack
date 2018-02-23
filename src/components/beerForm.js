@@ -9,6 +9,10 @@ const formPadStyle = {
   // backgroundColor: "#D3D3D3"
 };
 
+// const beerStyles = ["India Pale Ale (IPA)", "American Pale Ale", "Imperial IPA", "Imperial Stout", "Sour/Wild Ale", "Saison", "Stout",
+// "Golden Ale/Blond Ale", "Porter", "Session IPA", "Sweet Stout", "Cider", "Amber Ale", "Fruit Beer", "Brown Ale"]
+
+
 const formStyle = {
   background: "#fbfbfb",
   border: "1px solid #d9d9d9",
