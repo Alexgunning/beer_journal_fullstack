@@ -161,7 +161,17 @@ def put_beer():
 @app.route('/getBeers')
 @requires_auth
 def get_beers():
-    beers = mongo.db.beers.find({"user": g.current_user._id })
+    search = request.args.get('search')
+    if search:
+        beers = mongo.db.beers.find({"user": g.current_user._id, "$text":{"$search": search}})
+    else:
+        beers = mongo.db.beers.find({"user": g.current_user._id})
+    #TODO do we need to sort this stuff
+    # To sort the results in order of relevance score, you must explicitly project the $meta textScore field and sort on it:
+    #     db.stores.find(
+    #        { $text: { $search: "java coffee shop" } },
+    #        { score: { $meta: "textScore" } }
+    #     ).sort( { score: { $meta: "textScore" } } )
     return jsonify(list(beers))
 
 @app.route('/getBeerById/<string:beer_id>')
