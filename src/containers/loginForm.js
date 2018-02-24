@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { loginUser } from '../actions/login'
+import { loginUser } from '../actions/auth'
 import LoginForm from '../components/loginForm'
 import { Route, Redirect }from "react-router-dom";
-import * as actionCreators from '../actions/login';
+import * as actionCreators from '../actions/auth';
 
 const listStyle = {
   width: "20%",

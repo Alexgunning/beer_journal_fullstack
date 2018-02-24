@@ -13,7 +13,7 @@ import {
   REGISTER_USER_FAILURE,
   REGISTER_USER_REQUEST,
   REGISTER_USER_SUCCESS,
-} from '../actions/login';
+} from '../actions/auth';
 
 const initialState = {
   token: null,
