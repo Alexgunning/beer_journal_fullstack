@@ -21,6 +21,7 @@ const initialState = {
   name: null,
   isAuthenticated: false,
   isAuthenticating: false,
+  authenticationAttempted: false,
   statusText: null,
   isRegistering: false,
   isRegistered: false,
@@ -43,23 +44,27 @@ export default createReducer(initialState, {
   Object.assign({}, state, {
     isAuthenticating: false,
     isAuthenticated: false,
+    authenticationAttempted: true,
     statusText: null,
   }),
   [CHECK_LOCAL_TOKEN_SUCCESS]: (state, payload) =>
   Object.assign({}, state, {
     isAuthenticating: true,
     isAuthenticated: false,
+    authenticationAttempted: true,
     token: payload.token
   }),
   [CHECK_TOKEN_REQUEST]: (state) =>
   Object.assign({}, state, {
     isAuthenticating: true,
     isAuthenticated: false,
+    authenticationAttempted: true,
   }),
   [CHECK_TOKEN_SUCCESS]: (state, payload) =>
   Object.assign({}, state, {
     isAuthenticating: false,
     isAuthenticated: true,
+    authenticationAttempted: true,
     token: payload.token,
     name: payload.name,
     email: payload.email,
@@ -69,6 +74,7 @@ export default createReducer(initialState, {
   Object.assign({}, state, {
     isAuthenticating: false,
     isAuthenticated: false,
+    authenticationAttempted: true,
     token: null,
     name: null,
     email: null,
@@ -78,12 +84,14 @@ export default createReducer(initialState, {
   [LOGIN_USER_REQUEST]: (state) =>
   Object.assign({}, state, {
     isAuthenticating: true,
+    authenticationAttempted: true,
     statusText: null,
   }),
   [LOGIN_USER_SUCCESS]: (state, payload) =>
   Object.assign({}, state, {
     isAuthenticating: false,
     isAuthenticated: true,
+    authenticationAttempted: true,
     token: payload.token,
     name: payload.name,
     email: payload.email,
@@ -93,6 +101,7 @@ export default createReducer(initialState, {
   Object.assign({}, state, {
     isAuthenticating: false,
     isAuthenticated: false,
+    authenticationAttempted: true,
     token: null,
     name: null,
     email: null,
@@ -101,6 +110,7 @@ export default createReducer(initialState, {
   [LOGOUT_USER]: (state) =>
   Object.assign({}, state, {
     isAuthenticated: false,
+    authenticationAttempted: true,
     token: null,
     email: null,
     name: null,
@@ -110,6 +120,7 @@ export default createReducer(initialState, {
   Object.assign({}, state, {
     isAuthenticating: false,
     isAuthenticated: true,
+    authenticationAttempted: true,
     isRegistering: false,
     token: payload.token,
     name: payload.name,
@@ -119,10 +130,12 @@ export default createReducer(initialState, {
   [REGISTER_USER_REQUEST]: (state) =>
   Object.assign({}, state, {
     isRegistering: true,
+    authenticationAttempted: true,
   }),
   [REGISTER_USER_FAILURE]: (state, payload) =>
   Object.assign({}, state, {
     isAuthenticated: false,
+    authenticationAttempted: true,
     token: null,
     token: null,
     email: null,

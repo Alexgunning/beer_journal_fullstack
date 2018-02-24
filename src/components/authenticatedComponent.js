@@ -8,21 +8,22 @@ import NavigationBar from './navigationBar'
 export function requireAuthentication(Component) {
   class AuthenticatedComponent extends React.Component {
     componentWillMount() {
-      const { dispatch, checkLocalToken, isAuthenticated } = this.props
-      if (!isAuthenticated)
+      const { checkLocalToken, isAuthenticated, isAuthenticating} = this.props
+      if (!isAuthenticated && !isAuthenticating)
         checkLocalToken()
     }
 
     render() {
 
-      if (this.props.isAuthenticating)
-        return(<div></div>)
+      const { dispatch, checkLocalToken, isAuthenticated, isAuthenticating, authenticationAttempted  } = this.props
+      if (isAuthenticating || !authenticationAttempted)
+        return(<div>Loading</div>)
       else
         return (
           <div>
             <Route
               render={props =>
-                  this.props.isAuthenticated ? (
+                  (this.props.isAuthenticated) ? (
                     <div>
                       <NavigationBar name={this.props.name} logout={this.props.logout} viewProfile={() => console.log("TODO Implement view profile")}/>
                       <Component {...props} />
@@ -49,6 +50,7 @@ export function requireAuthentication(Component) {
       email: state.auth.email,
       isAuthenticated: state.auth.isAuthenticated,
       isAuthenticating: state.auth.isAuthenticating,
+      authenticationAttempted: state.auth.authenticationAttempted,
       name: state.auth.name,
     };
   }

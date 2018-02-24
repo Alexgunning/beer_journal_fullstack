@@ -5,7 +5,7 @@ import * as actionCreators from '../actions/login';
 import { Route, Redirect }from "react-router-dom";
 
 export function requireNoAuthentication(Component) {
-  class AuthenticatedComponent extends React.Component {
+  class NotAuthenticatedComponent extends React.Component {
     componentWillMount() {
       const { dispatch, checkLocalToken, isAuthenticated, isAuthenticating } = this.props
       if (!isAuthenticated)
@@ -13,7 +13,7 @@ export function requireNoAuthentication(Component) {
     }
 
     render() {
-    let returnAddress = this.props.location.state ? this.props.location.state.from : "/";
+      let returnAddress = this.props.location.state ? this.props.location.state.from : "/";
 
       if (this.props.isAuthenticating)
         return(<div></div>)
@@ -35,8 +35,6 @@ export function requireNoAuthentication(Component) {
             />
           </div>
         );
-
-
     }
   }
 
@@ -53,6 +51,6 @@ export function requireNoAuthentication(Component) {
     return bindActionCreators(actionCreators, dispatch);
   }
 
-  return connect(mapStateToProps, mapDispatchToProps)(AuthenticatedComponent);
+  return connect(mapStateToProps, mapDispatchToProps)(NotAuthenticatedComponent);
 }
 
