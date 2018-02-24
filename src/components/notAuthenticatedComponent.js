@@ -7,7 +7,7 @@ import { Route, Redirect }from "react-router-dom";
 export function requireNoAuthentication(Component) {
   class NotAuthenticatedComponent extends React.Component {
     componentWillMount() {
-      const { dispatch, checkLocalToken, isAuthenticated, isAuthenticating } = this.props
+      const { checkLocalToken, isAuthenticated } = this.props
       if (!isAuthenticated)
         checkLocalToken()
     }
