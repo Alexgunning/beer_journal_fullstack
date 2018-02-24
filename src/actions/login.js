@@ -119,7 +119,6 @@ export function loginUser(email, password) {
 
 export function checkToken(token) {
   return (dispatch) => {
-    dispatch(checkTokenRequest());
     return checkTokenCall(token)
       .then(parseJSON)
       .then(response => {
@@ -151,6 +150,7 @@ export function checkLocalToken() {
   let token = localStorage.getItem('token');
   if (token != null) {
     return function (dispatch) {
+      dispatch(checkTokenRequest());
       dispatch(checkLocalTokenSuccess(token));
       return dispatch(checkToken(token))
     }
