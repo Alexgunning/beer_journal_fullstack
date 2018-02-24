@@ -127,14 +127,14 @@ class BeerList extends Component {
                 {this.props.beers.map(beer => (
                   <div style={{width: "300px", margin: "20px" }}>
                     <Card
-                      style={{ width: "300px" }}
+                      style={{ width: "320px" }}
                       key={beer._id}
                       actions={[]}
                       onClick={()=> {history.push(`beer/${beer._id}`)}}
                       cover={<div style={parent}><img width={80} height={216} alt="example" src={beer.image}/></div>}
                     >
                       <Meta
-                        title={beer.name}
+                        title={<Title beer={beer.name} rating={beer.rating}/>}
                         description={beer.brewer}
                       />
                     </Card>
