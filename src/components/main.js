@@ -2,10 +2,10 @@ import React from 'react'
 import BeerListContainer from '../containers/beerList'
 import SearchBar from '../containers/searchBar'
 
-const Main = () => (
+const Main = (props) => (
   <main>
-   <SearchBar/>
-   <BeerListContainer/>
+   <SearchBar {...props}/>
+   <BeerListContainer {...props}/>
   </main>
 )
 

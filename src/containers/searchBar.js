@@ -2,8 +2,10 @@ import { connect } from 'react-redux'
 import React, { Component } from 'react'
 import { Input, Icon, Button } from 'antd';
 import { Route } from 'react-router-dom'
+import * as _ from 'lodash'
 
 import { fetchBeerListIfNeeded } from '../actions/fetchBeerList'
+// var _ = require('lodash');
 const Search = Input.Search;
 
 const parent =  {
@@ -11,25 +13,29 @@ const parent =  {
   justifyContent: "center",
 }
 
-function handleSearch (value, fetchBeer, history) {
-  history.push({search: `?search=${value}`});
-  value => fetchBeer(value)
+function handleSearch (fetchBeer, history, value) {
+  history.push(`?search=${value}`);
+  fetchBeer(value)
 }
+
+let curriedHandleSearch = _.curry(handleSearch)
 
 class SearchBar extends Component {
 
+  constructor(props) {
+    super(props);
+  }
+
   render() {
-
     const temp = true;
-
     return (
       <div>
         <Route render={({history}) => (
           <div style={parent}>
             <Search
               placeholder="Find Beers"
-              onSearch={(value) => handleSearch(value, this.props.fetchBeer, history)}
               style={{ width: "600px", margin: "20px" }}
+              onSearch={curriedHandleSearch(this.props.fetchBeer, history)}
               size="large"
               enterButton
             />
@@ -45,6 +51,7 @@ class SearchBar extends Component {
 }
 
 const mapStateToProps = (state) => ({
+
 })
 
 const mapDispatchToProps = (dispatch) => ({

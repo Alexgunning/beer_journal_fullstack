@@ -9,7 +9,6 @@ class BeerFormContainer extends Component {
 
   componentDidMount() {
     let { fetchBeer, newBeer} = this.props;
-    console.log(this.props.match);
     if (this.props.match.path === "/new") {
       newBeer();
     }
