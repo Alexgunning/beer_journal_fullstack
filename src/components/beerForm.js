@@ -25,7 +25,6 @@ const formStyle = {
 class BeerForm extends Component {
   state = {
     confirmDirty: false,
-    autoCompleteResult: [],
     attemptToLeave: false,
     updated: false
   };
@@ -52,7 +51,6 @@ class BeerForm extends Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const buttonName = this.props.buttonName;
-    const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
       span: 10,

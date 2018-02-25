@@ -15,7 +15,7 @@ export function requireAuthentication(Component) {
 
     render() {
 
-      const { dispatch, checkLocalToken, isAuthenticated, isAuthenticating, authenticationAttempted  } = this.props
+      const { isAuthenticated, isAuthenticating, authenticationAttempted  } = this.props
       if (isAuthenticating || !authenticationAttempted)
         return(<div>Loading</div>)
       else
@@ -23,7 +23,7 @@ export function requireAuthentication(Component) {
           <div>
             <Route
               render={props =>
-                  (this.props.isAuthenticated) ? (
+                  (isAuthenticated) ? (
                     <div>
                       <NavigationBar name={this.props.name} logout={this.props.logout} viewProfile={() => console.log("TODO Implement view profile")}/>
                       <Component {...props} />

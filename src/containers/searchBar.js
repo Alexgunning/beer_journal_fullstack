@@ -1,9 +1,7 @@
 import { connect } from 'react-redux'
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { fetchBeerListIfNeeded } from '../actions/fetchBeerList'
-import { Route } from 'react-router-dom'
 import { Input } from 'antd';
 const Search = Input.Search;
 

@@ -1,22 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
-import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
+import { fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'
 import { putBeer } from '../actions/putBeer'
 import BeerForm from '../components/beerForm'
-
-const listStyle = {
-  width: "20%",
-  margin: "0 auto"
-};
 
 class BeerFormContainer extends Component {
 
   componentDidMount() {
     let { fetchBeer, newBeer} = this.props;
     console.log(this.props.match);
-    if (this.props.match.path == "/new") {
+    if (this.props.match.path === "/new") {
       newBeer();
     }
     else {
@@ -26,7 +20,7 @@ class BeerFormContainer extends Component {
   }
 
   render() {
-    const { selectedBeer, handlePostSubmit, handlePutSubmit, load, pristine, reset, submitting } = this.props
+    const { selectedBeer, handlePostSubmit, handlePutSubmit } = this.props
     if (selectedBeer.loading){
       return (
         <div>
@@ -37,7 +31,7 @@ class BeerFormContainer extends Component {
     else {
       //TODO set a variable and clean this up
       return(
-        <BeerForm initialValues={selectedBeer.beer} handleSubmit={this.props.match.path == "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)} buttonName={this.props.match.path == "/new" ? "Add Beer": "Update Beer"} />
+        <BeerForm initialValues={selectedBeer.beer} handleSubmit={this.props.match.path === "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)} buttonName={this.props.match.path === "/new" ? "Add Beer": "Update Beer"} />
       )
     }
   }

@@ -32,14 +32,6 @@ function checkTokenCall(token) {
   return axios.get('http://127.0.0.1:5000/checkToken', config);
 }
 
-function create_user(email, password, name) {
-  return axios.post('/api/create_user', {
-    email,
-    password,
-    name
-  });
-}
-
 export function loginUserFailure(error) {
   // localStorage.removeItem('token');
   return {

@@ -1,12 +1,6 @@
 import React from 'react'
-import BeerForm from './beerForm'
 
-import { Layout, Menu, Breadcrumb, Icon, Dropdown } from 'antd';
-import { Row, Col } from 'antd';
-
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
-const { Header, Content, Footer } = Layout;
+import { Menu, Dropdown } from 'antd';
 
 const headerStyle = {
   background: "#fafafa",
@@ -17,9 +11,9 @@ const headerStyle = {
 const menu = ({ logout, viewProfile }) => (
   <Menu
     onClick={({ key }) => {
-      if (key == "logout")
+      if (key === "logout")
         logout()
-      else if (key == "profile")
+      else if (key === "profile")
         viewProfile()
   }} >
     <Menu.Item key="profile">
@@ -30,10 +24,6 @@ const menu = ({ logout, viewProfile }) => (
     </Menu.Item>
   </Menu>
 );
-
-const titleStyle = {
-  fontSize: "3vw",
-}
 
 const parent =  {
   "display": "flex"
@@ -75,7 +65,7 @@ const NavigationBar = ({name, logout, viewProfile}) => (
   <div style={headerStyle}>
     <div style={parent}>
       <div style={beerIcon}>
-        <img style={img} src={"./beerblue2.png"} />
+        <img alt="beer icon" style={img} src={"./beerblue2.png"} />
       </div>
 
       <div style={title}><strong><p style={titleText}>Beer Journal</p></strong></div>
@@ -83,7 +73,7 @@ const NavigationBar = ({name, logout, viewProfile}) => (
       <div style={userText}>{name}</div>
       <div style={userImage}>
         <Dropdown overlay={menu({logout, viewProfile})} >
-          <img style={img} src={"./userblue2.png"} />
+          <img alt="user icon" style={img} src={"./userblue2.png"} />
         </Dropdown>
       </div>
     </div>

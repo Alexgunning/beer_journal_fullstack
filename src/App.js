@@ -1,13 +1,9 @@
 import React, { Component } from 'react'
 import thunk from 'redux-thunk'
-import { render } from 'react-dom'
 import { createStore, applyMiddleware } from 'redux'
 import { BrowserRouter, Route } from 'react-router-dom'
 import { createLogger } from 'redux-logger'
 import { Provider } from 'react-redux'
-
-import Button from 'antd/lib/button';
-import './App.css';
 
 import reducer from './reducers'
 import Main from './components/main'

@@ -2,11 +2,10 @@ import { connect } from 'react-redux'
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import { List, Card,  Avatar, Icon, Rate } from 'antd';
+import { List, Card, Rate } from 'antd';
 
 import { fetchBeerListIfNeeded } from '../actions/fetchBeerList'
-import { requestBeer, fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
+import { fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'
 import { Route } from 'react-router-dom'
 import AddBeerButton from '../components/addBeerButton'
@@ -31,41 +30,17 @@ const listItemStyle = {
   margin: "6px"
 };
 
-const IconText = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);
-
-
 const parent =  {
   display: "flex",
   justifyContent: "center",
 }
 
-const parentImageCard =  {
-  display: "flex",
-  padding: "5px",
-}
 const parentCard =  {
   display: "flex",
   justifyContent: "center",
   alignContent: "flex-start",
   flexFlow: "row wrap",
 
-}
-const beerIcon = {
-  width: "58px",
-}
-const title = {
-  flex: 1,
-  fontSize: "3vw",
-}
-
-const cardImage =  {
-  display: "flex",
-  justifyContent: "center",
 }
 
 const cardContainerStyle = {

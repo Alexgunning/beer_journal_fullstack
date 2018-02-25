@@ -1,20 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { loginUser } from '../actions/auth'
 import LoginForm from '../components/loginForm'
-import { Route, Redirect }from "react-router-dom";
 import * as actionCreators from '../actions/auth';
-
-const listStyle = {
-  width: "20%",
-  margin: "0 auto"
-};
 
 class LoginFormContainer extends Component {
 
   render() {
-    const {  loginUser, from, isAuthenticated } = this.props
+    const {  loginUser, from } = this.props
       return (
         <div>
           <LoginForm from={from} loginUser={loginUser}/>

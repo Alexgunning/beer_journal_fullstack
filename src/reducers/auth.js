@@ -137,7 +137,6 @@ export default createReducer(initialState, {
     isAuthenticated: false,
     authenticationAttempted: true,
     token: null,
-    token: null,
     email: null,
     registerStatusText: `Register Error: ${payload.status} ${payload.statusText}`,
   }),

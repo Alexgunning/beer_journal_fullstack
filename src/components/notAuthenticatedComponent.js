@@ -13,8 +13,6 @@ export function requireNoAuthentication(Component) {
     }
 
     render() {
-      let returnAddress = this.props.location.state ? this.props.location.state.from : "/";
-
       if (this.props.isAuthenticating)
         return(<div></div>)
       else
