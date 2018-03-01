@@ -23,7 +23,7 @@ def bad_request(code, message):
     response.status_code = code
     return response
 
-@app.route('/register', methods=['POST'])
+@app.route('/auth/register', methods=['POST'])
 def register():
     try:
         new_user = json.loads(request.data)
@@ -48,7 +48,7 @@ def register():
 
     return jsonify(_id=mongo_user["_id"], name=mongo_user["name"], token=mongo_user["token"])
 
-@app.route('/register_jwt', methods=['POST'])
+@app.route('/auth/register_jwt', methods=['POST'])
 def register_jwt():
     try:
         new_user = json.loads(request.data)
@@ -72,7 +72,7 @@ def register_jwt():
 
     return jsonify(id=mongo_user["_id"], token=generate_token_jwt(mongo_user))
 
-@app.route("/login_jwt", methods=["POST"])
+@app.route("/auth/login_jwt", methods=["POST"])
 def login_jwt():
     incoming = request.get_json()
     user = User.get_user_with_email_and_password(incoming["email"], incoming["password"])
@@ -82,12 +82,12 @@ def login_jwt():
 
     return jsonify(error=True), 403
 
-@app.route("/user_jwt", methods=["GET"])
+@app.route("/auth/user_jwt", methods=["GET"])
 @requires_auth_jwt
 def get_user_jwt():
     return jsonify(result=g.current_user)
 
-@app.route("/login", methods=["POST"])
+@app.route("/auth/login", methods=["POST"])
 def login():
     try:
         login = json.loads(request.data)
@@ -108,18 +108,18 @@ def login():
         return jsonify(_id=user._id, name=user.name, token=token)
     return jsonify(error=True), 403
 
-@app.route('/logout')
+@app.route('/auth/logout')
 @requires_auth
 def logout():
     remove_token(g.current_user._id)
     return "logout success"
 
-@app.route('/checkToken')
+@app.route('/auth/checkToken')
 @requires_auth
 def check_token():
     return jsonify(_id=g.current_user._id, name=g.current_user.name, email=g.current_user.email, token=g.current_user.token)
 
-@app.route('/addBeer', methods=['POST'])
+@app.route('/beer', methods=['POST'])
 @requires_auth
 def add_beer():
     user = g.current_user
@@ -138,7 +138,7 @@ def add_beer():
     mongo.db.beers.insert_one(beer)
     return jsonify(beer)
 
-@app.route('/putBeer', methods=['PUT'])
+@app.route('/beer', methods=['PUT'])
 @requires_auth
 def put_beer():
     user = g.current_user
@@ -158,7 +158,7 @@ def put_beer():
         mongo.db.beers.update_one({"_id": beer["_id"]}, {"$set": beer})
     return jsonify(beer)
 
-@app.route('/getBeers')
+@app.route('/beer', methods=['GET'])
 @requires_auth
 def get_beers():
     search = request.args.get('search')
@@ -174,10 +174,16 @@ def get_beers():
     #     ).sort( { score: { $meta: "textScore" } } )
     return jsonify(list(beers))
 
-@app.route('/getBeerById/<string:beer_id>')
+@app.route('/beer/<string:beer_id>')
 @requires_auth
 def get_beer_by_id(beer_id):
     beer = mongo.db.beers.find_one({"_id": beer_id})
     if not beer:
         abort(400)
     return jsonify(beer)
+
+@app.route('/beer/<string:beer_id>', methods=['DELETE'])
+@requires_auth
+def delete_beer_by_id(beer_id):
+    result = mongo.db.beers.delete_one({"_id": beer_id})
+    print(result)
