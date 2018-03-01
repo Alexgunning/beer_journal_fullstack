@@ -81,25 +81,31 @@ class BeerList extends Component {
       abv: PropTypes.number.isRequired,
       image: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired
-    }).isRequired).isRequired,
-    dispatch: PropTypes.func.isRequired
+    }).isRequired).isRequired
   }
 
   componentDidMount() {
-    const { dispatch } = this.props
-    dispatch(fetchBeerListIfNeeded())
+    let { fetchBeer, query } = this.props;
+    fetchBeer(query)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let { fetchBeer, query } = this.props;
+    if (query != nextProps.query)
+      fetchBeer(nextProps.query)
   }
 
   // extra={<div>rating {beer.rating}*</div>}
 
   render() {
+    let { beers, query } = this.props;
     if (false)
       return (
         <div style={parent}>
           <div style={cardContainerStyle}>
             <Route render={({history}) => (
               <div style={parentCard}>
-                {this.props.beers.map(beer => (
+                {beers.map(beer => (
                   <div style={{width: "300px", margin: "20px" }}>
                     <Card
                       style={{ width: "320px" }}
@@ -132,7 +138,7 @@ class BeerList extends Component {
                 <List
                   itemLayout="vertical"
                   size="large"
-                  dataSource={this.props.beers}
+                  dataSource={beers}
                   renderItem={beer => (
                     <List.Item
                       key={beer._id}
@@ -162,14 +168,12 @@ class BeerList extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatch: dispatch,
-  requestBeer: fetchBeerIfNeeded,
-  newBeer: newBeer,
-  postBeer: postBeer
+  fetchBeer: (search) => dispatch(fetchBeerListIfNeeded(search))
 })
 
 const mapStateToProps = (state) => ({
-  beers: state.allBeers.beers
+  beers: state.allBeers.beers,
+  query: state.search.query
 })
 
 

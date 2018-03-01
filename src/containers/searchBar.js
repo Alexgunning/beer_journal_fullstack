@@ -4,7 +4,6 @@ import { Input, Icon, Button } from 'antd';
 import { Route } from 'react-router-dom'
 import * as _ from 'lodash'
 
-import { fetchBeerListIfNeeded } from '../actions/fetchBeerList'
 import { updateSearch, deleteSearch } from '../actions/search'
 const Search = Input.Search;
 
@@ -13,16 +12,14 @@ const parent =  {
   justifyContent: "center",
 }
 
-function handleSearch (fetchBeer, updateSearchString, history, value) {
+function handleSearch (updateSearchString, history, value) {
   history.push(`?search=${value}`);
   updateSearchString(value);
-  fetchBeer(value);
 }
 
-function handleClearSearch (fetchEmptyBeer, deleteSearchString, history, value) {
+function handleClearSearch (deleteSearchString, history, value) {
   history.push('');
   deleteSearchString();
-  fetchEmptyBeer();
 }
 //TODO figure out if we want to move some of this functionality to local state
 //also some of the actions the way we update where search is happeing and how it
@@ -49,13 +46,12 @@ class SearchBar extends Component {
   }
 
   componentDidMount() {
-    let { fetchBeer, updateSearchString, location } = this.props;
+    let { updateSearchString, location } = this.props;
     let queryParams = parseQuery(location.search)
     let currentSearch = queryParams.search;
     if (currentSearch) {
       this.setState({ value: currentSearch });
       updateSearchString(currentSearch);
-      fetchBeer(currentSearch);
     }
   }
 
@@ -65,10 +61,8 @@ class SearchBar extends Component {
     this.setState({ value });
   }
 
-  // defaultValue={this.props.search}
   render() {
-    let { search, fetchBeer, updateSearchString, deleteSearchString } = this.props;
-    const temp = true;
+    let { search, updateSearchString, deleteSearchString } = this.props;
     return (
       <div>
         <Route render={({history}) => (
@@ -77,16 +71,16 @@ class SearchBar extends Component {
               placeholder="Find Beers"
               style={{ width: "600px", margin: "20px" }}
               size="large"
-              onSearch={curriedHandleSearch(fetchBeer, updateSearchString, history)}
+              onSearch={curriedHandleSearch(updateSearchString, history)}
               onChange={this.onChange}
               value={this.state.value}
               enterButton
             />
             <div>
-              { this.props.search ? <Button style={{ margin: "20px" } }
-                onClick={(value) => { this.setState({value: ""}); curriedClearSearch(fetchBeer, deleteSearchString, history)(value) }}
+              { search ? <Button style={{ margin: "20px" } }
+                onClick={(value) => { this.setState({value: ""}); curriedClearSearch(deleteSearchString, history)(value) }}
                 icon="close">
-                {this.props.search}</Button>
+                {search}</Button>
                   : <div></div> }
                 </div>
                 <br /><br />
@@ -102,9 +96,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchBeer: (search) => dispatch(fetchBeerListIfNeeded(search)),
   updateSearchString: (search) => dispatch(updateSearch(search)),
-  deleteSearchString: (search) => dispatch(deleteSearch(search))
+  deleteSearchString: () => dispatch(deleteSearch())
 })
 
 export default connect(
