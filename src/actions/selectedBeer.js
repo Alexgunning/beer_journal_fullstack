@@ -33,7 +33,7 @@ export const receiveBeer = (json) => ({
 
 const fetchBeer = beerId => dispatch => {
   dispatch(requestBeer(beerId))
-  return axios.get(`${API_URL}/getBeerById/${beerId}`)
+  return axios.get(`${API_URL}/beer/${beerId}`)
     .then(res => dispatch(receiveBeer(res.data)), err => console.log("ERR", err))
 }
 

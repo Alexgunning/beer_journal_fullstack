@@ -20,7 +20,7 @@ export const putBeer = beer => dispatch => {
   dispatch(requestPutBeer())
   beer.abv = parseFloat(beer.abv);
   beer.rating = parseFloat(beer.rating);
-  return axios.put(`${API_URL}/putBeer`,beer)
+  return axios.put(`${API_URL}/beer`,beer)
     .then(res => { console.log("put", res);
        receivePutBeerAction(res.data);
     }

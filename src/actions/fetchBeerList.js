@@ -6,7 +6,6 @@ export const REQUEST_BEER_LIST = 'REQUEST_BEER_LIST'
 export const RECEIVE_BEER_LIST = 'RECEIVE_BEER_LIST'
 export const SELECT_BEER = 'SELECT_BEER'
 
-
 export const requestBeerList = () => ({
   type: REQUEST_BEER_LIST
 })
@@ -22,7 +21,7 @@ const fetchBeers = (search) => dispatch => {
   if (search)
     params.search = search
   dispatch(requestBeerList())
-  return axios.get(`${API_URL}/getBeers`, { params })
+  return axios.get(`${API_URL}/beer`, { params })
     .then(res => dispatch(receiveBeerList(res.data)))
 }
 

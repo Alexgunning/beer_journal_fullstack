@@ -20,7 +20,7 @@ export const postBeer = beer => dispatch => {
   dispatch(requestPostBeer())
   beer.abv = parseFloat(beer.abv);
   beer.rating = parseFloat(beer.rating);
-  return axios.post(`${API_URL}/addBeer`,beer)
+  return axios.post(`${API_URL}/beer`)
     .then(res => {
        receivePostBeerAction(res.data);
     }

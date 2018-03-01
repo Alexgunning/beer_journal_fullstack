@@ -20,7 +20,7 @@ function parseJSON(response) {
 }
 
 function login(email, password) {
-  return axios.post(`${API_URL}/login`, {
+  return axios.post(`${API_URL}/auth/login`, {
     email,
     password,
   });
@@ -31,11 +31,10 @@ function checkTokenCall(token) {
     headers: {'Authorization':token}
   };
 
-  return axios.get(`${API_URL}/checkToken`, config);
+  return axios.get(`${API_URL}/auth/checkToken`, config);
 }
 
 export function loginUserFailure(error) {
-  // localStorage.removeItem('token');
   return {
     type: LOGIN_USER_FAILURE,
     payload: {
