@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export const UPDATE_SEARCH = 'UPDATE_SEARCH'
 export const DELETE_SEARCH = 'DELETE_SEARCH'
 

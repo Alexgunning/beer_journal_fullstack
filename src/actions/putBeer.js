@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { API_URL } from '../constants';
+
 export const REQUEST_PUT_BEER = 'REQUEST_PUT_BEER'
 export const RECEIVE_PUT_BEER = 'RECEIVE_PUT_BEER'
 
@@ -18,7 +20,7 @@ export const putBeer = beer => dispatch => {
   dispatch(requestPutBeer())
   beer.abv = parseFloat(beer.abv);
   beer.rating = parseFloat(beer.rating);
-  return axios.put('http://127.0.0.1:5000/putBeer',beer)
+  return axios.put(`${API_URL}/putBeer`,beer)
     .then(res => { console.log("put", res);
        receivePutBeerAction(res.data);
     }

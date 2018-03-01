@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { API_URL } from '../constants';
+
 export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS'
 export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE'
 export const LOGIN_USER_REQUEST = 'LOGIN_USER_REQUEST'
@@ -18,7 +20,7 @@ function parseJSON(response) {
 }
 
 function login(email, password) {
-  return axios.post('http://127.0.0.1:5000/login', {
+  return axios.post(`${API_URL}/login`, {
     email,
     password,
   });
@@ -29,7 +31,7 @@ function checkTokenCall(token) {
     headers: {'Authorization':token}
   };
 
-  return axios.get('http://127.0.0.1:5000/checkToken', config);
+  return axios.get(`${API_URL}/checkToken`, config);
 }
 
 export function loginUserFailure(error) {

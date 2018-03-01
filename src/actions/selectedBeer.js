@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { API_URL } from '../constants';
+
 export const REQUEST_SELECTED_BEER = 'REQUEST_SELECTED_BEER'
 export const RECEIVE_SELECTED_BEER = 'RECEIVE_SELECTED_BEER'
 export const SELECT_BEER = 'SELECT_BEER'
@@ -31,7 +33,7 @@ export const receiveBeer = (json) => ({
 
 const fetchBeer = beerId => dispatch => {
   dispatch(requestBeer(beerId))
-  return axios.get(`http://127.0.0.1:5000/getBeerById/${beerId}`)
+  return axios.get(`${API_URL}/getBeerById/${beerId}`)
     .then(res => dispatch(receiveBeer(res.data)), err => console.log("ERR", err))
 }
 
