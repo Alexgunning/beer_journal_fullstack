@@ -57,7 +57,6 @@ class SearchBar extends Component {
 
   onChange = (e) => {
     let { value } = e.target;
-    console.log(value);
     this.setState({ value });
   }
 
