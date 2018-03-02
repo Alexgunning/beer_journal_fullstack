@@ -189,4 +189,4 @@ def delete_beer_by_id(beer_id):
     if result.deleted_count == 0:
         return bad_request(404, "Not Found")
     else:
-        return "deleted", 204
+        return "", 204
