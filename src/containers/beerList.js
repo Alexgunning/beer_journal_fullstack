@@ -65,7 +65,7 @@ const Title = ({ beer, rating }) => (
     <div style={middleTitle}>
     </div>
     <div>
-      <Rate disabled defaultValue={rating} />
+      <Rate allowHalf disabled defaultValue={rating} />
     </div>
   </div>
 )
