@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, Rate } from 'antd';
+import { Form, Input, Button, Rate, Modal } from 'antd';
 import { Route, Redirect } from 'react-router-dom'
+
 const FormItem = Form.Item;
+const confirm = Modal.confirm;
 const { TextArea } = Input;
 
 const formPadStyle = {
   padding: "25px"
   // backgroundColor: "#D3D3D3"
 };
-
-// const beerStyles = ["India Pale Ale (IPA)", "American Pale Ale", "Imperial IPA", "Imperial Stout", "Sour/Wild Ale", "Saison", "Stout",
-// "Golden Ale/Blond Ale", "Porter", "Session IPA", "Sweet Stout", "Cider", "Amber Ale", "Fruit Beer", "Brown Ale"]
-
 
 const formStyle = {
   background: "#fbfbfb",
@@ -28,6 +26,26 @@ class BeerForm extends Component {
     attemptToLeave: false,
     updated: false
   };
+
+  deleteBeer(history) {
+    console.log(this.props);
+    this.props.handleDelete(this.props.initialValues._id);
+    history.push('/');
+  }
+
+  showDeleteConfirm(history, deleteFunc) {
+    confirm({
+      title: 'Are you sure delete this beer?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deleteFunc(history);
+      },
+      onCancel() {
+      },
+    });
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -151,7 +169,14 @@ class BeerForm extends Component {
                   <FormItem>
                     <Button style={buttonItem} type="danger" htmlType="button" onClick={() => history.push('/') } >Cancel</Button>
                   </FormItem>
-                </div>
+                  <FormItem>
+                    <Button style={buttonItem} type="danger" htmlType="button" onClick={() => {
+                      this.showDeleteConfirm(history, this.deleteBeer.bind(this));
+                    }
+
+                    } >Delete Beer</Button>
+                </FormItem>
+              </div>
               )} />
           </Form>
         </div>
