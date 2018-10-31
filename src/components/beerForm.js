@@ -28,19 +28,32 @@ class BeerForm extends Component {
   };
 
   deleteBeer(history) {
-    console.log(this.props);
     this.props.handleDelete(this.props.initialValues._id);
     history.push('/');
   }
 
   showDeleteConfirm(history, deleteFunc) {
     confirm({
-      title: 'Are you sure delete this beer?',
+      title: 'Delete this beer?',
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
         deleteFunc(history);
+      },
+      onCancel() {
+      },
+    });
+  }
+
+  showCancelConfirm(history) {
+    confirm({
+      title: 'Lose unsaved changes?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        history.push('/');
       },
       onCancel() {
       },
@@ -167,7 +180,7 @@ class BeerForm extends Component {
                     <Button style={buttonItem} type="primary" htmlType="submit">{buttonName}</Button>
                   </FormItem>
                   <FormItem>
-                    <Button style={buttonItem} type="danger" htmlType="button" onClick={() => history.push('/') } >Cancel</Button>
+                    <Button style={buttonItem} type="danger" htmlType="button" onClick={() => { this.props.form.isFieldsTouched() ? this.showCancelConfirm(history) : history.push('/') } } >Cancel</Button>
                   </FormItem>
                   <FormItem>
                     <Button style={buttonItem} type="danger" htmlType="button" onClick={() => {
