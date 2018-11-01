@@ -2,9 +2,9 @@ venv/
 
 *.DS_Store
 
-.vscode/
+*/.vscode/
 
-__pycache__/
+*/__pycache__/
 
 *.pyc
-sandbox.py
+*/sandbox.py
