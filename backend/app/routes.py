@@ -32,8 +32,9 @@ def register():
     new_user["_id"] = str(uuid4())
     try:
         validate(new_user, user_schema)
-    except:
-        return abort(400)
+    except ValidationError as e:
+        print(e.message)
+        return bad_request(400, e.message)
     user = User(**new_user)
     user.set_password(new_user["password"])
     user.token = generate_token()
