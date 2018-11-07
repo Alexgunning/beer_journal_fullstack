@@ -1,27 +1,29 @@
 '''routes'''
-from werkzeug.security import generate_password_hash, check_password_hash
 import json
 from uuid import uuid4
-from flask import Flask, jsonify, request, abort, g
-from flask_pymongo import PyMongo
-from flask_bcrypt import Bcrypt
+from flask import jsonify, request, abort, g
 from jsonschema import validate, ValidationError
 from app import app, mongo
 from schema import beer_schema, user_schema, login_schema
 from user import User
 from app import login
-from auth import generate_token, requires_auth, verify_token, remove_token
-from auth_jwt import generate_token_jwt, requires_auth_jwt, verify_token_jwt
+from auth import generate_token, remove_token
+from auth_jwt import generate_token_jwt, requires_auth_jwt
+from auth0 import requires_auth
+from flask_cors import cross_origin
+
 
 def get_user(id):
     user = mongo.db.users.find_one({"_id": id})
     return User(**user)
 
-#TODO convert all aborts to this
+
+# TODO convert all aborts to this
 def bad_request(code, message):
     response = jsonify({'message': message})
     response.status_code = code
     return response
+
 
 @app.route('/auth/register', methods=['POST'])
 def register():
@@ -39,15 +41,16 @@ def register():
     user.set_password(new_user["password"])
     user.token = generate_token()
 
-    #Pull out the class variables
+    # Pull out the class variables
     mongo_user = vars(user)
     try:
         user_insert = mongo.db.users.insert_one(mongo_user)
-    #TODO figure out more descriptive error
+    # TODO figure out more descriptive error
     except:
         return bad_request(400, "Dupliciate email")
 
     return jsonify(_id=mongo_user["_id"], name=mongo_user["name"], token=mongo_user["token"])
+
 
 @app.route('/auth/register_jwt', methods=['POST'])
 def register_jwt():
@@ -63,11 +66,11 @@ def register_jwt():
     user = User(**new_user)
     user.set_password(new_user["password"])
 
-    #Pull out the class variables
+    # Pull out the class variables
     mongo_user = vars(user)
     try:
         user_insert = mongo.db.users.insert_one(mongo_user)
-    #TODO figure out more descriptive error
+    # TODO figure out more descriptive error
     except:
         return bad_request(400, "Dupliciate email")
 
@@ -121,14 +124,16 @@ def check_token():
     return jsonify(_id=g.current_user._id, name=g.current_user.name, email=g.current_user.email, token=g.current_user.token)
 
 @app.route('/beer', methods=['POST'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
 @requires_auth
 def add_beer():
-    user = g.current_user
+    userObject = g.current_user
+    user = userObject["sub"]
     try:
         beer = json.loads(request.data)
     except:
         return bad_request(400, "Request not json")
-    beer["user"] = user._id
+    beer["user"] = user
     beer["_id"] = str(uuid4())
 
     try:
@@ -139,15 +144,18 @@ def add_beer():
     mongo.db.beers.insert_one(beer)
     return jsonify(beer)
 
+
 @app.route('/beer', methods=['PUT'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
 @requires_auth
 def put_beer():
-    user = g.current_user
+    userObject = g.current_user
+    user = userObject["sub"]
     try:
         beer = json.loads(request.data)
     except:
         abort(400)
-    beer["user"] = user._id
+    beer["user"] = user
     try:
         validate(beer, beer_schema)
     except ValidationError as e:
@@ -159,23 +167,30 @@ def put_beer():
         mongo.db.beers.update_one({"_id": beer["_id"]}, {"$set": beer})
     return jsonify(beer)
 
+
 @app.route('/beer', methods=['GET'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
 @requires_auth
 def get_beers():
     search = request.args.get('search')
+    userObject = g.current_user
+    user = userObject["sub"]
     if search:
-        beers = mongo.db.beers.find({"user": g.current_user._id, "$text":{"$search": search}})
+        beers = mongo.db.beers.find({"user": user, "$text": {"$search": search}})
     else:
-        beers = mongo.db.beers.find({"user": g.current_user._id})
-    #TODO do we need to sort this stuff
-    # To sort the results in order of relevance score, you must explicitly project the $meta textScore field and sort on it:
+        beers = mongo.db.beers.find({"user": user})
+    # TODO do we need to sort this stuff
+    #  To sort the results in order of relevance score, you must explicitly
+    #  project the $meta textScore field and sort on it:
     #     db.stores.find(
     #        { $text: { $search: "java coffee shop" } },
     #        { score: { $meta: "textScore" } }
     #     ).sort( { score: { $meta: "textScore" } } )
     return jsonify(list(beers))
 
+
 @app.route('/beer/<string:beer_id>')
+@cross_origin(headers=['Content-Type', 'Authorization'])
 @requires_auth
 def get_beer_by_id(beer_id):
     beer = mongo.db.beers.find_one({"_id": beer_id})
@@ -183,7 +198,9 @@ def get_beer_by_id(beer_id):
         abort(400)
     return jsonify(beer)
 
+
 @app.route('/beer/<string:beer_id>', methods=['DELETE'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
 @requires_auth
 def delete_beer_by_id(beer_id):
     result = mongo.db.beers.delete_one({"_id": beer_id})
@@ -191,3 +208,5 @@ def delete_beer_by_id(beer_id):
         return bad_request(404, "Not Found")
     else:
         return "", 204
+
+    #{'iss': 'https://beerjournal.auth0.com/', 'sub': 'auth0|5bdd1d879457577d5a02d7d5', 'aud': ['https://beerjournal.com', 'https://beerjournal.auth0.com/userinfo'], 'iat': 1541485185, 'exp': 1541492385, 'azp': 'drf1C0zfl8tae0lHz23DzSOjI5rRYqCA', 'scope': 'openid profile given_name read:beer write:beer read:users read:user_idp_tokens'}
