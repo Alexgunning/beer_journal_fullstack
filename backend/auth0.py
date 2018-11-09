@@ -5,6 +5,7 @@ from config import Auth0
 
 from flask import Flask, request, jsonify, g
 from jose import jwt
+import functools
 
 AUTH0_DOMAIN = Auth0.AUTH0_DOMAIN
 API_AUDIENCE = Auth0.API_AUDIENCE
@@ -55,6 +56,21 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
+def run_once(f):
+    def wrapper():
+        if not wrapper.has_run:
+            wrapper.has_run = True
+            return f()
+    wrapper.has_run = False
+    return wrapper
+
+@functools.lru_cache(maxsize=1, typed=False)
+def getJWKS():
+    print("getting those keys")
+    jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+    jwks = json.loads(jsonurl.read())
+    return jwks
+
 
 def requires_auth(f):
     """Determines if the Access Token is valid
@@ -62,8 +78,9 @@ def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = get_token_auth_header()
-        jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
-        jwks = json.loads(jsonurl.read())
+        # jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+        # jwks = json.loads(jsonurl.read())
+        jwks = getJWKS()
         unverified_header = jwt.get_unverified_header(token)
         rsa_key = {}
         for key in jwks["keys"]:
