@@ -20,7 +20,8 @@ export const postBeer = beer => dispatch => {
   dispatch(requestPostBeer())
   beer.abv = parseFloat(beer.abv);
   beer.rating = parseFloat(beer.rating);
-  return axios.post(`${API_URL}/beer`)
+  let headers = { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` };
+  return axios.post(`${API_URL}/beer`, beer, {headers} )
     .then(res => {
        receivePostBeerAction(res.data);
     }

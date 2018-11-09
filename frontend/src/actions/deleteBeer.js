@@ -32,7 +32,8 @@ export const failureDeleteBeerAction = (beer) => ({
 
 export const deleteBeer = beer => dispatch => {
   dispatch(requestDeleteBeer(beer))
-  return axios.delete(`${API_URL}/beer/${beer}`)
+  let headers = { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` };
+  return axios.delete(`${API_URL}/beer/${beer}`, {headers})
     .then(res => {
        receiveDeleteBeerAction(res.data);
     }

@@ -12,6 +12,20 @@ import LoginForm from './containers/loginForm'
 import {requireAuthentication} from './components/authenticatedComponent.js'
 import {requireNoAuthentication} from './components/notAuthenticatedComponent.js'
 
+//TODO: MOVE TO BETTER PLACE
+import Auth from './auth/auth';
+import Callback from './components/callback';
+const auth = new Auth();
+
+const handleAuthentication = (props) => {
+  let { location, history } = props;
+  console.log('here be da props');
+  console.log(props);
+  if (/access_token|id_token|error/.test(location.hash)) {
+    auth.handleAuthentication(history);
+  }
+}
+
 const middleware = [ thunk ];
 if (process.env.NODE_ENV !== 'production') {
   middleware.push(createLogger())
@@ -32,8 +46,13 @@ class App extends Component {
               <Route exact path="/" component={requireAuthentication(Main)}/>
               <Route exact path="/new" component={requireAuthentication(BeerFormContainer)}/>
               <Route exact path="/beer/:id" component={requireAuthentication(BeerFormContainer)}/>
-            </div>
-          </BrowserRouter>
+              <Route path="/callback" render={(props) => {
+                handleAuthentication(props);
+                return <Callback {...props} />
+              }}/>
+            <Route path="/balls" render={() => { return (<div>balls</div>)}} />
+          </div>
+        </BrowserRouter>
       </Provider>
     )
   }

@@ -21,7 +21,8 @@ const fetchBeers = (search) => dispatch => {
   if (search)
     params.search = search
   dispatch(requestBeerList())
-  return axios.get(`${API_URL}/beer`, { params })
+  let headers = { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` };
+  return axios.get(`${API_URL}/beer`, { headers, params })
     .then(res => dispatch(receiveBeerList(res.data)))
 }
 

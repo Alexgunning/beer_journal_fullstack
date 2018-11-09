@@ -4,26 +4,19 @@ import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/auth';
 import { Route, Redirect }from "react-router-dom";
 import NavigationBar from './navigationBar'
+import Auth from '../auth/auth';
+
+let auth = new Auth();
 
 export function requireAuthentication(Component) {
   class AuthenticatedComponent extends React.Component {
-    componentWillMount() {
-      const { checkLocalToken, isAuthenticated, isAuthenticating} = this.props
-      if (!isAuthenticated && !isAuthenticating)
-        checkLocalToken()
-    }
 
     render() {
-
-      const { isAuthenticated, isAuthenticating, authenticationAttempted  } = this.props
-      if (isAuthenticating || !authenticationAttempted)
-        return(<div>Loading</div>)
-      else
         return (
           <div>
             <Route
               render={props =>
-                  (isAuthenticated) ? (
+                  (auth.isAuthenticated()) ? (
                     <div>
                       <NavigationBar name={this.props.name} logout={this.props.logout} viewProfile={() => console.log("TODO Implement view profile")}/>
                       <Component {...props} />
