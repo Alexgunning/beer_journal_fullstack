@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/auth';
 import { Route, Redirect }from "react-router-dom";
+import Auth from '../auth/auth';
+
+let auth = new Auth();
 
 export function requireNoAuthentication(Component) {
   class NotAuthenticatedComponent extends React.Component {
