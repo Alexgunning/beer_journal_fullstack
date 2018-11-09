@@ -217,12 +217,9 @@ def delete_beer_by_id(beer_id):
 def status():
     return "running"
 
-@app.route('/do', methods=['POST'])
-def do():
-    return "running"
-
-@cross_origin(headers=[])
 @app.route('/upload', methods=['POST'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
+@requires_auth
 def fileUpload():
     target=os.path.join(UPLOAD_FOLDER,'test_docs')
     if not os.path.isdir(target):

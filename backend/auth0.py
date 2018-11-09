@@ -56,14 +56,6 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-def run_once(f):
-    def wrapper():
-        if not wrapper.has_run:
-            wrapper.has_run = True
-            return f()
-    wrapper.has_run = False
-    return wrapper
-
 @functools.lru_cache(maxsize=1, typed=False)
 def getJWKS():
     jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
