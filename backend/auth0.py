@@ -1,13 +1,14 @@
 import json
 from six.moves.urllib.request import urlopen
 from functools import wraps
+from config import Auth0
 
 from flask import Flask, request, jsonify, g
 from jose import jwt
 
-AUTH0_DOMAIN = 'beerjournal.auth0.com'
-API_AUDIENCE = 'https://beerjournal.com'
-ALGORITHMS = ["RS256"]
+AUTH0_DOMAIN = Auth0.AUTH0_DOMAIN
+API_AUDIENCE = Auth0.API_AUDIENCE
+ALGORITHMS = Auth0.ALGORITHMS
 
 APP = Flask(__name__)
 
