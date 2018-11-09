@@ -50,7 +50,6 @@ class App extends Component {
                 handleAuthentication(props);
                 return <Callback {...props} />
               }}/>
-            <Route path="/balls" render={() => { return (<div>balls</div>)}} />
           </div>
         </BrowserRouter>
       </Provider>
