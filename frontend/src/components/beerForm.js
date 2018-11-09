@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, Rate, Modal } from 'antd';
+import { Form, Input, Button, Rate, Modal, Upload, Icon } from 'antd';
 import { Route, Redirect } from 'react-router-dom'
 
 const FormItem = Form.Item;
@@ -10,6 +10,10 @@ const formPadStyle = {
   padding: "25px"
   // backgroundColor: "#D3D3D3"
 };
+const dragBoxStyle = {
+  height: "180px",
+  lineHeight: "1.5"
+}
 
 const formStyle = {
   background: "#fbfbfb",
@@ -79,6 +83,14 @@ class BeerForm extends Component {
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   }
 
+  normFile = (e) => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const buttonName = this.props.buttonName;
@@ -146,16 +158,6 @@ class BeerForm extends Component {
               </FormItem>
               <FormItem
                 {...formItemLayout}
-                label="Image"
-              >
-                {getFieldDecorator('image', {
-                  initialValue: initialValues.image
-                })(
-                  <Input />
-                )}
-              </FormItem>
-              <FormItem
-                {...formItemLayout}
                 label="Description"
               >
                 {getFieldDecorator('description', {
@@ -174,6 +176,7 @@ class BeerForm extends Component {
                   <Rate allowHalf  />
                 )}
               </FormItem>
+              <PicturesWall />
               <Route render={({history}) => (
                 <div style={buttonRow} id="button-row">
                   <FormItem>
@@ -197,5 +200,55 @@ class BeerForm extends Component {
       );
   }
 }
+// const { Upload, Icon, Modal } = antd;
+
+class PicturesWall extends React.Component {
+  state = {
+    previewVisible: false,
+    previewImage: '',
+    fileList: [],
+  };
+
+  handleCancel = () => this.setState({ previewVisible: false })
+
+  handlePreview = (file) => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  }
+
+  handleChange = ({ fileList }) => this.setState({ fileList })
+
+  headers = { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
+
+  render() {
+    const { previewVisible, previewImage, fileList } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload Beer Image</div>
+      </div>
+    );
+    return (
+      <div className="clearfix">
+        <Upload
+          headers={this.headers}
+          action="http://localhost:5000/upload"
+          listType="picture-card"
+          fileList={fileList}
+          onPreview={this.handlePreview}
+          onChange={this.handleChange}
+        >
+          {fileList.length >= 1 ? null : uploadButton}
+        </Upload>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        </Modal>
+      </div>
+    );
+  }
+}
+
 
 export default Form.create()(BeerForm);

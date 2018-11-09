@@ -9,8 +9,8 @@ import reducer from './reducers'
 import Main from './components/main'
 import BeerFormContainer from './containers/beerForm'
 import LoginForm from './containers/loginForm'
-import {requireAuthentication} from './components/authenticatedComponent.js'
-import {requireNoAuthentication} from './components/notAuthenticatedComponent.js'
+import {requireAuthentication} from './components/authenticatedComponent'
+import {requireNoAuthentication} from './components/notAuthenticatedComponent'
 
 //TODO: MOVE TO BETTER PLACE
 import Auth from './auth/auth';
@@ -19,8 +19,6 @@ const auth = new Auth();
 
 const handleAuthentication = (props) => {
   let { location, history } = props;
-  console.log('here be da props');
-  console.log(props);
   if (/access_token|id_token|error/.test(location.hash)) {
     auth.handleAuthentication(history);
   }
