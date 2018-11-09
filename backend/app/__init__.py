@@ -2,13 +2,14 @@ from flask import Flask
 from config import Config
 from flask_cors import CORS
 from flask_pymongo import PyMongo
-from flask_login import LoginManager
 from flask import Flask
 
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+
 app = Flask(__name__)
-login = LoginManager(app)
-login.init_app(app)
-# login.login_view = 'login'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 app.config.from_object(Config)
 

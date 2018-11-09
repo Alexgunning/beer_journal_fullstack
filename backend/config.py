@@ -9,3 +9,4 @@ class Auth0(object):
     AUTH0_DOMAIN = 'beerjournal.auth0.com'
     API_AUDIENCE = 'https://beerjournal.com'
     ALGORITHMS = ["RS256"]
+

@@ -1,18 +1,22 @@
 '''routes'''
 import json
 from uuid import uuid4
-from flask import jsonify, request, abort, g
+from flask import jsonify, request, abort, g, session
 from jsonschema import validate, ValidationError
 from app import app, mongo
 from schema import beer_schema, user_schema, login_schema
 from user import User
-from app import login
+# from app import login
 from auth import generate_token, remove_token
 from auth_jwt import generate_token_jwt, requires_auth_jwt
 from auth0 import requires_auth
 from flask_cors import cross_origin
+from pprint import pprint
+import functools
+import os
+from werkzeug.utils import secure_filename
 
-
+UPLOAD_FOLDER = '/Users/alexandergunning/projects/beer_journal_fullstack/backend'
 def get_user(id):
     user = mongo.db.users.find_one({"_id": id})
     return User(**user)
@@ -209,4 +213,32 @@ def delete_beer_by_id(beer_id):
     else:
         return "", 204
 
-    #{'iss': 'https://beerjournal.auth0.com/', 'sub': 'auth0|5bdd1d879457577d5a02d7d5', 'aud': ['https://beerjournal.com', 'https://beerjournal.auth0.com/userinfo'], 'iat': 1541485185, 'exp': 1541492385, 'azp': 'drf1C0zfl8tae0lHz23DzSOjI5rRYqCA', 'scope': 'openid profile given_name read:beer write:beer read:users read:user_idp_tokens'}
+@app.route('/status')
+def status():
+    return "running"
+
+@app.route('/do', methods=['POST'])
+def do():
+    return "running"
+
+@cross_origin(headers=[])
+@app.route('/upload', methods=['POST'])
+def fileUpload():
+    target=os.path.join(UPLOAD_FOLDER,'test_docs')
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    print("welcome to upload`")
+    # pprint(vars(request))
+    file = request.files.get('file')
+
+    filename = secure_filename(file.filename)
+    # filename = 'kittle.jpg'
+    destination="/".join([target, filename])
+    print(destination)
+    pprint(file)
+    file.save(destination)
+    session['uploadFilePath']=destination
+    response="Whatever you wish too return"
+    return response
+    return "success"
+

@@ -66,7 +66,6 @@ def run_once(f):
 
 @functools.lru_cache(maxsize=1, typed=False)
 def getJWKS():
-    print("getting those keys")
     jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
     jwks = json.loads(jsonurl.read())
     return jwks
@@ -101,7 +100,6 @@ def requires_auth(f):
                     audience=API_AUDIENCE,
                     issuer="https://"+AUTH0_DOMAIN+"/"
                 )
-                print("my token", payload)
             except jwt.ExpiredSignatureError:
                 raise AuthError({"code": "token_expired",
                                 "description": "token is expired"}, 401)
