@@ -31,19 +31,19 @@ class BeerForm extends Component {
     updated: false
   };
 
-  deleteBeer(history) {
-    this.props.handleDelete(this.props.initialValues._id);
+  deleteBeer(history, _id, handleDelete) {
+    handleDelete(_id);
     history.push('/');
   }
 
-  showDeleteConfirm(history, deleteFunc) {
+  showDeleteConfirm(history, _id, callDeleteFunc, handleDelete) {
     confirm({
       title: 'Delete this beer?',
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        deleteFunc(history);
+        callDeleteFunc(history, _id, handleDelete);
       },
       onCancel() {
       },
@@ -71,7 +71,6 @@ class BeerForm extends Component {
         //TODO FIGURE OUT A BETTE WAY TO DO THIS
         if (this.props.initialValues._id != null){
           values._id = this.props.initialValues._id;
-          values.image = this.props.initialValues.image;
         }
         this.setState({updated : true})
         this.props.handleSubmit(values);
@@ -176,7 +175,7 @@ class BeerForm extends Component {
                   <Rate allowHalf  />
                 )}
               </FormItem>
-              <PicturesWall />
+              <PicturesWall id={initialValues._id}/>
               <Route render={({history}) => (
                 <div style={buttonRow} id="button-row">
                   <FormItem>
@@ -186,11 +185,7 @@ class BeerForm extends Component {
                     <Button style={buttonItem} type="danger" htmlType="button" onClick={() => { this.props.form.isFieldsTouched() ? this.showCancelConfirm(history) : history.push('/') } } >Cancel</Button>
                   </FormItem>
                   <FormItem>
-                    <Button style={buttonItem} type="danger" htmlType="button" onClick={() => {
-                      this.showDeleteConfirm(history, this.deleteBeer.bind(this));
-                    }
-
-                    } >Delete Beer</Button>
+                    <DeleteButton  isNew={this.props.isNew} style={buttonItem} _id={initialValues._id} isNew={this.props.isNew} type="danger" htmlType="button" history={history} deleteConfirm={this.showDeleteConfirm} deleteBeerFunc={this.deleteBeer.bind(this)} handeDelete={this.props.handleDelete} />
                 </FormItem>
               </div>
               )} />
@@ -200,7 +195,20 @@ class BeerForm extends Component {
       );
   }
 }
-// const { Upload, Icon, Modal } = antd;
+
+class DeleteButton extends React.Component {
+  render() {
+    if (this.props.isNew) {
+      return (<div></div>)
+    }
+    else
+      return(
+        <Button style={this.props.style} type="danger" htmlType="button" onClick={() => {
+          this.props.deleteConfirm(this.props.history, this.props._id, this.props.deleteBeerFunc, this.props.handeDelete); }}>
+         Delete Beer</Button>
+      )
+  }
+}
 
 class PicturesWall extends React.Component {
   state = {
@@ -220,9 +228,11 @@ class PicturesWall extends React.Component {
 
   handleChange = ({ fileList }) => this.setState({ fileList })
 
+
   headers = { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
 
   render() {
+    console.log('my id', this.props.id)
     const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
       <div>
