@@ -4,7 +4,7 @@ from uuid import uuid4
 from flask import jsonify, request, abort, g, session
 from jsonschema import validate, ValidationError
 from app import app, mongo
-from schema import beer_schema, user_schema, login_schema
+from schema import beer_schema
 from user import User
 # from app import login
 from auth import generate_token, remove_token
@@ -15,6 +15,7 @@ from pprint import pprint
 import functools
 import os
 from werkzeug.utils import secure_filename
+import boto3
 
 UPLOAD_FOLDER = '/Users/alexandergunning/projects/beer_journal_fullstack/backend'
 def get_user(id):
@@ -29,104 +30,6 @@ def bad_request(code, message):
     return response
 
 
-@app.route('/auth/register', methods=['POST'])
-def register():
-    try:
-        new_user = json.loads(request.data)
-    except:
-        abort(400)
-    new_user["_id"] = str(uuid4())
-    try:
-        validate(new_user, user_schema)
-    except ValidationError as e:
-        print(e.message)
-        return bad_request(400, e.message)
-    user = User(**new_user)
-    user.set_password(new_user["password"])
-    user.token = generate_token()
-
-    # Pull out the class variables
-    mongo_user = vars(user)
-    try:
-        user_insert = mongo.db.users.insert_one(mongo_user)
-    # TODO figure out more descriptive error
-    except:
-        return bad_request(400, "Dupliciate email")
-
-    return jsonify(_id=mongo_user["_id"], name=mongo_user["name"], token=mongo_user["token"])
-
-
-@app.route('/auth/register_jwt', methods=['POST'])
-def register_jwt():
-    try:
-        new_user = json.loads(request.data)
-    except:
-        abort(400)
-    new_user["_id"] = str(uuid4())
-    try:
-        validate(new_user, user_schema)
-    except:
-        return abort(400)
-    user = User(**new_user)
-    user.set_password(new_user["password"])
-
-    # Pull out the class variables
-    mongo_user = vars(user)
-    try:
-        user_insert = mongo.db.users.insert_one(mongo_user)
-    # TODO figure out more descriptive error
-    except:
-        return bad_request(400, "Dupliciate email")
-
-    return jsonify(id=mongo_user["_id"], token=generate_token_jwt(mongo_user))
-
-@app.route("/auth/login_jwt", methods=["POST"])
-def login_jwt():
-    incoming = request.get_json()
-    user = User.get_user_with_email_and_password(incoming["email"], incoming["password"])
-    user_map = vars(user)
-    if user:
-        return jsonify(token=generate_token_jwt(user_map))
-
-    return jsonify(error=True), 403
-
-@app.route("/auth/user_jwt", methods=["GET"])
-@requires_auth_jwt
-def get_user_jwt():
-    return jsonify(result=g.current_user)
-
-@app.route("/auth/login", methods=["POST"])
-def login():
-    try:
-        login = json.loads(request.data)
-    except:
-        abort(400)
-    try:
-        validate(login, login_schema)
-    except ValidationError as e:
-        print(e.message)
-        return bad_request(400, e.message)
-    user = User.get_user_with_email_and_password(login["email"], login["password"])
-    if user:
-        if user.token:
-            token = user.token
-        else:
-            token = generate_token()
-            mongo.db.users.update_one({"_id": user._id }, {"$set": {"token" : token}})
-        return jsonify(_id=user._id, name=user.name, token=token)
-    return jsonify(error=True), 403
-
-@app.route('/auth/logout')
-@requires_auth
-def logout():
-    remove_token(g.current_user._id)
-    return "logout success"
-
-@app.route('/auth/checkToken')
-@requires_auth
-def check_token():
-    return jsonify(_id=g.current_user._id, name=g.current_user.name, email=g.current_user.email, token=g.current_user.token)
-
 @app.route('/beer', methods=['POST'])
 @cross_origin(headers=['Content-Type', 'Authorization'])
 @requires_auth
@@ -138,7 +41,6 @@ def add_beer():
     except:
         return bad_request(400, "Request not json")
     beer["user"] = user
-    beer["_id"] = str(uuid4())
 
     try:
         validate(beer, beer_schema)
@@ -211,11 +113,22 @@ def delete_beer_by_id(beer_id):
     if result.deleted_count == 0:
         return bad_request(404, "Not Found")
     else:
-        return "", 204
+        return "No Content", 204
 
 @app.route('/status')
 def status():
+    s3 = boto3.resource('s3')
+    for bucket in s3.buckets.all():
+        print(bucket.name)
     return "running"
+
+@app.route('/deleteImage', methods=['DELETE'])
+@cross_origin(headers=['Content-Type', 'Authorization'])
+@requires_auth
+def deleteImage():
+    # TODO delete the image that is posted to S3
+    return ""
+
 
 @app.route('/upload', methods=['POST'])
 @cross_origin(headers=['Content-Type', 'Authorization'])
@@ -224,17 +137,22 @@ def fileUpload():
     target=os.path.join(UPLOAD_FOLDER,'test_docs')
     if not os.path.isdir(target):
         os.mkdir(target)
-    print("welcome to upload`")
-    # pprint(vars(request))
+    print("welcome to upload")
+    pprint(vars(request))
     file = request.files.get('file')
+    pprint(vars(file))
 
     filename = secure_filename(file.filename)
+
+    s3 = boto3.resource('s3')
+    s3.Object('beerjournal', filename).put(Body=file.stream)
+
     # filename = 'kittle.jpg'
     destination="/".join([target, filename])
     print(destination)
     pprint(file)
     file.save(destination)
-    session['uploadFilePath']=destination
+    session['uploadFilePath'] = destination
     response="Whatever you wish too return"
     return response
     return "success"
