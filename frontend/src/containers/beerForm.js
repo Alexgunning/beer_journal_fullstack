@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import uuid from 'uuid';
+
 import { fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'
 import { putBeer } from '../actions/putBeer'
@@ -28,6 +30,8 @@ class BeerFormContainer extends Component {
 
   render() {
     const { selectedBeer, handlePostSubmit, handlePutSubmit, handleDelete} = this.props
+    let isNew = this.props.match.path === "/new";
+    let _id = uuid.v4();
     if (selectedBeer.loading){
       return (
         <div>
@@ -36,9 +40,8 @@ class BeerFormContainer extends Component {
       )
     }
     else {
-      //TODO set a variable and clean this up
       return(
-        <BeerForm initialValues={selectedBeer.beer} handleSubmit={this.props.match.path === "/new" ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)} buttonName={this.props.match.path === "/new" ? "Add Beer": "Update Beer"} handleDelete={handleDelete} /> 
+        <BeerForm initialValues={isNew ? { _id } : selectedBeer.beer} isNew={isNew} handleSubmit={ isNew ? (beer) => handlePostSubmit(beer) : (beer) => handlePutSubmit(beer)} buttonName={ isNew ? "Add Beer": "Update Beer"} handleDelete={handleDelete} />
       )
     }
   }
