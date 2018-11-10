@@ -79,7 +79,6 @@ class BeerList extends Component {
       name: PropTypes.string.isRequired,
       brewer: PropTypes.string.isRequired,
       abv: PropTypes.number.isRequired,
-      image: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired
     }).isRequired).isRequired
   }
