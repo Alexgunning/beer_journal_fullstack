@@ -20,10 +20,16 @@ const fetchBeers = (search) => dispatch => {
   let params = {}
   if (search)
     params.search = search
-  dispatch(requestBeerList())
-  let headers = { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` };
-  return axios.get(`${API_URL}/beer`, { headers, params })
-    .then(res => dispatch(receiveBeerList(res.data)))
+
+  //TODO: TRYTING TO SEE IF THIS HELPS
+  //CURRENTNLY THE BEERS REFRESH BEFORE I CAN
+  setTimeout(function(){
+
+    dispatch(requestBeerList())
+    let headers = { 'Authorization': `Bearer ${localStorage.getItem('access_token')}` };
+    return axios.get(`${API_URL}/beer`, { headers, params })
+      .then(res => dispatch(receiveBeerList(res.data)))
+  },100);
 }
 
 const shouldFetchBeers = (state) => {
