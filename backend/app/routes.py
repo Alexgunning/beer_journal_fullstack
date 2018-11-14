@@ -1,12 +1,11 @@
 '''routes'''
 import json
 from uuid import uuid4
-from flask import jsonify, request, abort, g, session
+from flask import jsonify, request, abort, g, session, send_from_directory
 from jsonschema import validate, ValidationError
 from app import app, mongo
 from schema import beer_schema
 from user import User
-# from app import login
 from auth import generate_token, remove_token
 from auth_jwt import generate_token_jwt, requires_auth_jwt
 from auth0 import requires_auth
@@ -115,45 +114,29 @@ def delete_beer_by_id(beer_id):
     else:
         return "No Content", 204
 
-@app.route('/status')
-def status():
-    s3 = boto3.resource('s3')
-    for bucket in s3.buckets.all():
-        print(bucket.name)
-    return "running"
-
-@app.route('/deleteImage', methods=['DELETE'])
-@cross_origin(headers=['Content-Type', 'Authorization'])
-@requires_auth
-def deleteImage():
-    # TODO delete the image that is posted to S3
-    return ""
-
+@app.route('/uploads/<string:filename>')
+def uploaded_file(filename):
+    target=os.path.join(UPLOAD_FOLDER,'beer_image')
+    try:
+        return send_from_directory(target, filename)
+    except:
+        return send_from_directory(target, "default_beer_icon.png")
 
 @app.route('/upload', methods=['POST'])
 @cross_origin(headers=['Content-Type', 'Authorization'])
 @requires_auth
 def fileUpload():
-    target=os.path.join(UPLOAD_FOLDER,'test_docs')
+    target=os.path.join(UPLOAD_FOLDER,'beer_image')
     if not os.path.isdir(target):
         os.mkdir(target)
-    print("welcome to upload")
-    pprint(vars(request))
     file = request.files.get('file')
-    pprint(vars(file))
 
-    filename = secure_filename(file.filename)
+    file = request.files.get('file')
+    id = request.headers.get('Id')
 
-    s3 = boto3.resource('s3')
-    s3.Object('beerjournal', filename).put(Body=file.stream)
-
-    # filename = 'kittle.jpg'
-    destination="/".join([target, filename])
+    destination="/".join([target, id])
     print(destination)
     pprint(file)
     file.save(destination)
     session['uploadFilePath'] = destination
-    response="Whatever you wish too return"
-    return response
     return "success"
-

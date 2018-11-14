@@ -9,6 +9,7 @@ import { fetchBeerIfNeeded, newBeer } from '../actions/selectedBeer'
 import { postBeer } from '../actions/postBeer'
 import { Route } from 'react-router-dom'
 import AddBeerButton from '../components/addBeerButton'
+import moment from 'moment'
 
 const { Meta } = Card;
 
@@ -18,16 +19,12 @@ const listStyle = {
   paddingBottom: "30px"
 };
 
-const outside = {
-  // maxWidth: "50%",
-  // margin: "0 auto",
-}
-
 const listItemStyle = {
   background: "#fafafa",
   border: "1px solid #d9d9d9",
   borderRadius: "6px", "padding": "12px",
-  margin: "6px"
+  margin: "6px",
+  width: "900px"
 };
 
 const parent =  {
@@ -98,6 +95,7 @@ class BeerList extends Component {
 
   render() {
     let { beers, query } = this.props;
+    //TODO Figure out where to put add beer button
     if (false)
       return (
         <div style={parent}>
@@ -111,7 +109,7 @@ class BeerList extends Component {
                       key={beer._id}
                       actions={[]}
                       onClick={()=> {history.push(`beer/${beer._id}`)}}
-                      cover={<div style={parent}><img width={80} height={216} alt="example" src={beer.image}/></div>}
+                      cover={<div style={parent}><img width={80} height={216} alt="example" src={`https://s3-us-west-1.amazonaws.com/beerjournal/${beer._id}`}/></div>}
                     >
                       <Meta
                         title={<Title beer={beer.name} rating={beer.rating}/>}
@@ -130,7 +128,6 @@ class BeerList extends Component {
       );
     else
       return (
-        <div style={outside}>
           <div style={parent}>
             <div style={listStyle}>
               <Route render={({history}) => (
@@ -144,7 +141,7 @@ class BeerList extends Component {
                       style={listItemStyle}
                       actions={[]}
                       onClick={()=> {history.push(`beer/${beer._id}`)}}
-                      extra={<img width={67} height={180} alt="logo" src={beer.image} />}
+                      extra={ <img width={67} height={180} alt="logo" src={`http://localhost:5000/uploads/${beer._id}?query=${new moment().format()}`} /> }
                     >
                       <List.Item.Meta
                         title={<Title beer={beer.name} rating={beer.rating}/>}
@@ -160,7 +157,6 @@ class BeerList extends Component {
             <AddBeerButton/>
           </div>
         </div>
-      </div>
       );
 
   }

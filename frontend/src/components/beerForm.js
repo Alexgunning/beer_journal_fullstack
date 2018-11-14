@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Form, Input, Button, Rate, Modal, Upload, Icon } from 'antd';
 import { Route, Redirect } from 'react-router-dom'
+import moment from 'moment'
 
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
@@ -68,10 +69,10 @@ class BeerForm extends Component {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        //TODO FIGURE OUT A BETTE WAY TO DO THIS
-        if (this.props.initialValues._id != null){
-          values._id = this.props.initialValues._id;
-        }
+        // LOOK INTO HOW TO HANDLE THIS STRING STUFF
+        // if (values.abv)
+        //   values.abv = values.abv.trim();
+        values._id = this.props.initialValues._id;
         this.setState({updated : true})
         this.props.handleSubmit(values);
       }
@@ -123,7 +124,7 @@ class BeerForm extends Component {
       return (
         <div style={formPadStyle}>
           <div style={formStyle}>
-            <img width={67} height={180} alt="logo" src={initialValues.image} />
+            <img width={67} height={180} alt="logo" src={`http://localhost:5000/uploads/${initialValues._id}?query=${new moment().format()}`} />
             <Form onSubmit={this.handleSubmit}>
               <FormItem
                 {...formItemLayout}
@@ -175,7 +176,7 @@ class BeerForm extends Component {
                   <Rate allowHalf  />
                 )}
               </FormItem>
-              <PicturesWall id={initialValues._id}/>
+              <PicturesWall _id={initialValues._id}/>
               <Route render={({history}) => (
                 <div style={buttonRow} id="button-row">
                   <FormItem>
@@ -229,10 +230,9 @@ class PicturesWall extends React.Component {
   handleChange = ({ fileList }) => this.setState({ fileList })
 
 
-  headers = { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
+  headers = { Authorization: `Bearer ${localStorage.getItem('access_token')}`, Id: this.props._id }
 
   render() {
-    console.log('my id', this.props.id)
     const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
       <div>
@@ -240,11 +240,13 @@ class PicturesWall extends React.Component {
         <div className="ant-upload-text">Upload Beer Image</div>
       </div>
     );
+    console.log(this.props._id);
     return (
       <div className="clearfix">
         <Upload
           headers={this.headers}
           action="http://localhost:5000/upload"
+          accept='.png, .jpg'
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}

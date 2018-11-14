@@ -31,3 +31,5 @@ yarn-error.log*
 
 # config
 **/auth0-variables.js
+
+**/beer_image/

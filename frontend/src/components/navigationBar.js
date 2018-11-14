@@ -65,7 +65,7 @@ const NavigationBar = ({name, logout, viewProfile}) => (
   <div style={headerStyle}>
     <div style={parent}>
       <div style={beerIcon}>
-        <img alt="beer icon" style={img} src={"./beerblue2.png"} />
+        <img alt="beer icon" style={img} src={"/beerblue2.png"} />
       </div>
 
       <div style={title}><strong><p style={titleText}>Beer Journal</p></strong></div>
@@ -73,7 +73,7 @@ const NavigationBar = ({name, logout, viewProfile}) => (
       <div style={userText}>{name}</div>
       <div style={userImage}>
         <Dropdown overlay={menu({logout, viewProfile})} >
-          <img alt="user icon" style={img} src={"./userblue2.png"} />
+          <img alt="user icon" style={img} src={"/userblue2.png"} />
         </Dropdown>
       </div>
     </div>

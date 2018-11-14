@@ -35,7 +35,6 @@ class BeerFormContainer extends Component {
     if (selectedBeer.loading){
       return (
         <div>
-          loading
         </div>
       )
     }
