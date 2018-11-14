@@ -7,4 +7,4 @@ Frontend written in Javascript/React
 
 Integrates with Auth0 for the Authentication/Authorization  
 Uses mongodb to store beer information  
-AntD library for react designs  
+AntD library for react stylings  
