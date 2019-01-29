@@ -12,7 +12,6 @@ AntD library for react stylings
 
 *To run the backend project navigate to backend folder and run*
 
-To run this project
 1. python3 -m virtualenv venv
 2. source venv/bin/activate
 3. pip install -r requirements.txt
