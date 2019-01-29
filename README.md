@@ -10,14 +10,17 @@ Uses mongodb to store beer information
 AntD library for react stylings  
 
 
-To run backend project navigate to backend folder and run
+*To run the backend project navigate to backend folder and run*
 
 To run this project
-1. clone project
-2. navigate to project directory
-3. python3 -m virtualenv venv
-4. source venv/bin/activate
-5. pip install -r requirements.txt
-6. export FLASK_APP=beer.py 
-7. flask run
-8. The project is now running at http://127.0.0.1:5000/
+1. python3 -m virtualenv venv
+2. source venv/bin/activate
+3. pip install -r requirements.txt
+4. export FLASK_APP=beer.py 
+5. flask run
+6. The project is now running at http://127.0.0.1:5000/
+
+*To run fronentd project navigate to frontend folder and run*
+1. npm install
+2. npm start
+3. The projebct can now be accessed at http://localhost:3000/
